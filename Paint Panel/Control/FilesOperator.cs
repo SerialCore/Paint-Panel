@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Controls;
 
 // The Collection of functions to save and open ink files or image files.
 
-namespace Paint_Panel
+namespace Paint_Panel.Control
 {
     class FilesOperator
     {

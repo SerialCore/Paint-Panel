@@ -1,23 +1,23 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using Windows.UI;
 using Windows.UI.Input.Inking;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
-namespace Paint_Panel
+namespace Paint_Panel.Pens
 {
-    class CalligraphyPen : InkToolbarCustomPen
+    class UsualPen : InkToolbarCustomPen
     {
+
         protected override InkDrawingAttributes CreateInkDrawingAttributesCore(Brush brush, double strokeWidth)
         {
             InkDrawingAttributes inkDrawingAttributes = new InkDrawingAttributes();
-            inkDrawingAttributes.PenTip = PenTipShape.Rectangle;
+            inkDrawingAttributes.PenTip = PenTipShape.Circle;
+            inkDrawingAttributes.Size = new Windows.Foundation.Size(strokeWidth * 1.5, strokeWidth * 2.5);
             SolidColorBrush solidColorBrush = brush as SolidColorBrush;
             inkDrawingAttributes.Color = solidColorBrush?.Color ?? Colors.Black;
-            inkDrawingAttributes.Size = new Windows.Foundation.Size(strokeWidth * 2, strokeWidth * 2);
 
-            Matrix3x2 matrix = Matrix3x2.CreateSkew((float)Math.PI / 4, 0);
+            Matrix3x2 matrix = Matrix3x2.CreateRotation(90);
             inkDrawingAttributes.PenTipTransform = matrix;
 
             return inkDrawingAttributes;

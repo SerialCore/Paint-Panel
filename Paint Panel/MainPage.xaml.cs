@@ -1,4 +1,6 @@
 ﻿using Microsoft.Graphics.Canvas;
+using Paint_Panel.Control;
+using Paint_Panel.Pens;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

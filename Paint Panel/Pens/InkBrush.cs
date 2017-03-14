@@ -3,7 +3,7 @@ using Windows.UI.Input.Inking;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 
-namespace Paint_Panel
+namespace Paint_Panel.Pens
 {
     class InkBrush : InkToolbarCustomPen
     {

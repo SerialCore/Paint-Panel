@@ -1,6 +1,6 @@
 ﻿using Microsoft.Toolkit.Uwp.Notifications;
 
-namespace Paint_Panel
+namespace Paint_Panel.Control
 {
     class ToastCollection
     {

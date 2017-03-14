@@ -3,7 +3,7 @@ using System.Collections.ObjectModel;
 using Windows.UI;
 using Windows.UI.Xaml.Media;
 
-namespace Paint_Panel
+namespace Paint_Panel.Control
 {
     class PanelColors
     {
