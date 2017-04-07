@@ -9,7 +9,6 @@ using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
-using Windows.System.Profile;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Input.Inking;
@@ -104,7 +103,7 @@ namespace Paint_Panel
         {
             if (x == null)
             {
-                ToastNotification notification = new ToastNotification(ToastCollection.NoneInsertedImage.GetXml());
+                ToastNotification notification = new ToastNotification(Control.ToastCollection.NoneInsertedImage.GetXml());
                 ToastNotificationManager.CreateToastNotifier().Show(notification);
                 return;
             }
@@ -116,7 +115,7 @@ namespace Paint_Panel
             if (file != null)
             {
                 operate.generateImage(file, inkCanvas, back_image, currentColor, x);
-                ToastNotification notification = new ToastNotification(ToastCollection.SaveSuccessfull.GetXml());
+                ToastNotification notification = new ToastNotification(Control.ToastCollection.SaveSuccessfull.GetXml());
                 ToastNotificationManager.CreateToastNotifier().Show(notification);
             }
         }
@@ -131,7 +130,7 @@ namespace Paint_Panel
             if (file != null)
             {
                 operate.generateImage(file, inkCanvas, currentColor);
-                ToastNotification notification = new ToastNotification(ToastCollection.SaveSuccessfull.GetXml());
+                ToastNotification notification = new ToastNotification(Control.ToastCollection.SaveSuccessfull.GetXml());
                 ToastNotificationManager.CreateToastNotifier().Show(notification);
             }
         }
@@ -146,7 +145,7 @@ namespace Paint_Panel
             if (file != null)
             {
                 operate.generateImage(file, inkCanvas);
-                ToastNotification notification = new ToastNotification(ToastCollection.SaveSuccessfull.GetXml());
+                ToastNotification notification = new ToastNotification(Control.ToastCollection.SaveSuccessfull.GetXml());
                 ToastNotificationManager.CreateToastNotifier().Show(notification);
             }
         }
@@ -242,7 +241,7 @@ namespace Paint_Panel
                 await FileIO.WriteBytesAsync(file, bt);
                 await CachedFileManager.CompleteUpdatesAsync(file);
 
-                ToastNotification notification = new ToastNotification(ToastCollection.SaveSuccessfull.GetXml());
+                ToastNotification notification = new ToastNotification(Control.ToastCollection.SaveSuccessfull.GetXml());
                 ToastNotificationManager.CreateToastNotifier().Show(notification);
             }
         }
@@ -359,7 +358,7 @@ namespace Paint_Panel
         {
             if (x == null)
             {
-                ToastNotification notification = new ToastNotification(ToastCollection.NoneInsertedImage.GetXml());
+                ToastNotification notification = new ToastNotification(Control.ToastCollection.NoneInsertedImage.GetXml());
                 ToastNotificationManager.CreateToastNotifier().Show(notification);
                 return;
             }
@@ -371,7 +370,7 @@ namespace Paint_Panel
                 stream = await file.OpenAsync(FileAccessMode.Read);
                 imageCollection.Add(new ImageCollection { FileName = file.Name, ImageStream = stream, ImageFile = getBitmapImage(stream) });
 
-                ToastNotification notification = new ToastNotification(ToastCollection.SaveSuccessfull.GetXml());
+                ToastNotification notification = new ToastNotification(Control.ToastCollection.SaveSuccessfull.GetXml());
                 ToastNotificationManager.CreateToastNotifier().Show(notification);
             }
         }
@@ -386,7 +385,7 @@ namespace Paint_Panel
                 stream = await file.OpenAsync(FileAccessMode.Read);
                 imageCollection.Add(new ImageCollection { FileName = file.Name, ImageStream = stream, ImageFile = getBitmapImage(stream) });
 
-                ToastNotification notification = new ToastNotification(ToastCollection.SaveSuccessfull.GetXml());
+                ToastNotification notification = new ToastNotification(Control.ToastCollection.SaveSuccessfull.GetXml());
                 ToastNotificationManager.CreateToastNotifier().Show(notification);
             }
         }
@@ -401,7 +400,7 @@ namespace Paint_Panel
                 stream = await file.OpenAsync(FileAccessMode.Read);
                 imageCollection.Add(new ImageCollection { FileName = file.Name, ImageStream = stream, ImageFile = getBitmapImage(stream) });
 
-                ToastNotification notification = new ToastNotification(ToastCollection.SaveSuccessfull.GetXml());
+                ToastNotification notification = new ToastNotification(Control.ToastCollection.SaveSuccessfull.GetXml());
                 ToastNotificationManager.CreateToastNotifier().Show(notification);
             }
         }

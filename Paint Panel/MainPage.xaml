@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="#FFD7D4BF">
+    <Grid Background="#FFC3C3C4">
 
         <Grid >
 
@@ -62,7 +62,7 @@
 
             </Border>
 
-            <Border Grid.Row="1" Grid.Column="1" Background="Beige" RequestedTheme="Light">
+            <Border Grid.Row="1" Grid.Column="1" Background="#FFF0F2F3" RequestedTheme="Light">
                 <Grid >
                     <Grid.RowDefinitions>
                         <RowDefinition Height="100"/>
@@ -82,7 +82,7 @@
                         <TextBox x:Name="size_hight" Width="100" Grid.Row="0" Grid.Column="1" InputScope="Number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <TextBlock Text="Canvas Width" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         <TextBox x:Name="size_width" Width="100" Grid.Row="1" Grid.Column="1" InputScope="Number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Button Grid.Column="2" Grid.RowSpan="2" Content="Reset" Click="new_size" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+                        <Button Grid.Column="2" Grid.RowSpan="2" Content="Reset" Click="new_size" HorizontalAlignment="Left" VerticalAlignment="Stretch" Height="48" Width="55" Background="#FF5156DC"/>
                     </Grid>
                     <ScrollViewer x:Name="color_list" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                         <ListView ItemsSource="{Binding myColors}" IsItemClickEnabled="True" ItemClick="color_list_ItemClick" SelectionMode="Single">

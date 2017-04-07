@@ -62,14 +62,7 @@ namespace Paint_Panel
                     // 当导航堆栈尚未还原时，导航到第一页，
                     // 并通过将所需信息作为导航参数传入来配置
                     // 参数
-                    if (AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Desktop")
-                    {
-                        rootFrame.Navigate(typeof(MainPage), e.Arguments);
-                    }
-                    else
-                    {
-                        rootFrame.Navigate(typeof(MainPage_Mobile), e.Arguments);
-                    }
+                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
                 }
                 // 确保当前窗口处于活动状态
                 Window.Current.Activate();
@@ -91,26 +84,13 @@ namespace Paint_Panel
                     Window.Current.Content = rootframe;
                 }
                 rootframe.BackStack.Clear();
-                if (AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Desktop")
-                {
-                    rootframe.Navigate(typeof(MainPage), file);
-                }
-                else
-                {
-                    rootframe.Navigate(typeof(MainPage_Mobile), file);
-                }
+                rootframe.Navigate(typeof(MainPage), file);
             }
             Window.Current.Activate();
         }
 
-        private async void launchEffect()
+        private void launchEffect()
         {
-            // 隐藏任务栏
-            if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
-            {
-                await Windows.UI.ViewManagement.StatusBar.GetForCurrentView().HideAsync();
-            }
-
             // 全屏
             Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
 
