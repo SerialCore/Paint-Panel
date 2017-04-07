@@ -27,7 +27,7 @@ namespace Paint_Panel
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
-    public sealed partial class MainPage : Page
+    public sealed partial class MainPage_Mobile : Page
     {
         public ObservableCollection<MyColors> myColors { get; set; }
 
@@ -37,7 +37,7 @@ namespace Paint_Panel
 
         StorageFolder folder = ApplicationData.Current.LocalFolder;
 
-        public MainPage()
+        public MainPage_Mobile()
         {
             // 页面的初始化
             this.InitializeComponent();
@@ -45,7 +45,7 @@ namespace Paint_Panel
             restore_image();
             // ink的初始化
             this.inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse
-                | Windows.UI.Core.CoreInputDeviceTypes.Pen;
+                | Windows.UI.Core.CoreInputDeviceTypes.Touch;
             inkToolbar.Loaded += InkToolbar_Loaded;
             // ListView必需的代码
             myColors = PanelColors.PaneColors;
@@ -78,26 +78,29 @@ namespace Paint_Panel
             }
         }
 
-        #region 用户操作
-
-        private void inputDevice_Click(object sender, RoutedEventArgs e)
+        private void inputDevice_Click_Mobile(object sender, RoutedEventArgs e)
         {
             if (inputDevice.IsChecked == true)
             {
                 this.inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse
-                | Windows.UI.Core.CoreInputDeviceTypes.Touch;
+                | Windows.UI.Core.CoreInputDeviceTypes.Pen;
             }
             else
             {
                 this.inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse
-                | Windows.UI.Core.CoreInputDeviceTypes.Pen;
+                | Windows.UI.Core.CoreInputDeviceTypes.Touch;
             }
         }
 
-        private void pens_colors_Click(object sender, RoutedEventArgs e)
+        private void InkToolbar_Loaded(object sender, RoutedEventArgs e)
         {
-            color_list.Visibility = Visibility.Collapsed;
-            pens_list.Visibility = Visibility.Visible;
+            InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
+            drawingAttributes.IgnorePressure = false;
+            drawingAttributes.FitToCurve = true;
+
+            inkToolbar.ActiveTool = inkToolbar.GetToolButton(InkToolbarTool.BallpointPen);
+            customPen.CustomPen = new UsualPen();
+            customPen.Palette = PanelColors.ToolColors;
         }
 
         private async void save_composite(object sender, RoutedEventArgs e)
@@ -204,6 +207,25 @@ namespace Paint_Panel
             }
         }
 
+        private void clear_img(object sender, RoutedEventArgs e)
+        {
+            restore_image();
+            if (x != null)
+            {
+                x.Dispose();
+                x = null;
+            }
+        }
+
+        private async void restore_image()
+        {
+            StorageFile image_file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Background/Mobile_Background.png"));
+            BitmapImage image = new BitmapImage();
+            x = await image_file.OpenAsync(FileAccessMode.Read);
+            image.SetSource(x);
+            back_image.Source = image;
+        }
+
         private async void open_ink(object sender, RoutedEventArgs e)
         {
             var picker = new FileOpenPicker
@@ -247,6 +269,15 @@ namespace Paint_Panel
             }
         }
 
+        private async Task<byte[]> ConvertImagetoByte(IRandomAccessStream fileStream)
+        {
+            var reader = new DataReader(fileStream.GetInputStreamAt(0));
+            await reader.LoadAsync((uint)fileStream.Size);
+            byte[] pixels = new byte[fileStream.Size];
+            reader.ReadBytes(pixels);
+            return pixels;
+        }
+
         private void ink_undo(object sender, RoutedEventArgs e)
         {
             IReadOnlyList<InkStroke> strokes = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
@@ -258,6 +289,11 @@ namespace Paint_Panel
             }
         }
 
+        private void choose_color(object sender, RoutedEventArgs e)
+        {
+            panel_colors.IsPaneOpen = !panel_colors.IsPaneOpen;
+        }
+
         private void color_list_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as MyColors;
@@ -265,12 +301,37 @@ namespace Paint_Panel
             currentColor = item.IndexColor;
         }
 
+        private void flyoutBase_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+        }
+
         private void pen_list_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as PensCollection;
-            customPen.CustomPen = item.Pen;
-            color_list.Visibility = Visibility.Visible;
-            pens_list.Visibility = Visibility.Collapsed;
+            switch (item.PenName)
+            {
+                case "Usual Pen":
+                    customPen.CustomPen = item.Pen;
+                    break;
+                case "Marker Pen":
+                    customPen.CustomPen = item.Pen;
+                    break;
+                case "Calligraphy Pen":
+                    customPen.CustomPen = item.Pen;
+                    break;
+                case "Pencil Brush":
+                    customPen.CustomPen = item.Pen;
+                    break;
+                case "Ink Brush":
+                    customPen.CustomPen = item.Pen;
+                    break;
+            }
+        }
+
+        private void open_Pens(object sender, RoutedEventArgs e)
+        {
+            panel_pens.IsPaneOpen = !panel_pens.IsPaneOpen;
         }
 
         private async void new_size(object sender, RoutedEventArgs e)
@@ -305,6 +366,30 @@ namespace Paint_Panel
                 sizePanel.Visibility = Visibility.Collapsed;
             else
                 sizePanel.Visibility = Visibility.Visible;
+        }
+
+        private async void refreshList()
+        {
+            IReadOnlyList<StorageFile> storageFiles = await folder.GetFilesAsync();
+            if (imageCollection != null)
+                imageCollection.Clear();
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            {
+                IRandomAccessStream stream = new InMemoryRandomAccessStream();
+                foreach (StorageFile item in storageFiles)
+                {
+                    stream = await item.OpenAsync(FileAccessMode.Read);
+                    imageCollection.Add(new ImageCollection { FileName = item.Name, ImageStream = stream, ImageFile = getBitmapImage(stream) });
+                    await Task.Delay(100);
+                }
+            });
+        }
+
+        private BitmapImage getBitmapImage(IRandomAccessStream indexStream)
+        {
+            BitmapImage bi3 = new BitmapImage();
+            bi3.SetSource(indexStream);
+            return bi3;
         }
 
         private async void collection_addnew(object sender, RoutedEventArgs e)
@@ -406,106 +491,5 @@ namespace Paint_Panel
             }
         }
 
-        #endregion
-
-        #region 方法调用
-
-        private void clear_img(object sender, RoutedEventArgs e)
-        {
-            restore_image();
-            if (x != null)
-            {
-                x.Dispose();
-                x = null;
-            }
-        }
-
-        private async void restore_image()
-        {
-            StorageFile image_file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Background/PC_Background.png"));
-            BitmapImage image = new BitmapImage();
-            x = await image_file.OpenAsync(FileAccessMode.Read);
-            image.SetSource(x);
-            back_image.Source = image;
-        }
-
-        private async Task<byte[]> ConvertImagetoByte(IRandomAccessStream fileStream)
-        {
-            var reader = new DataReader(fileStream.GetInputStreamAt(0));
-            await reader.LoadAsync((uint)fileStream.Size);
-            byte[] pixels = new byte[fileStream.Size];
-            reader.ReadBytes(pixels);
-            return pixels;
-        }
-
-        private async void refreshList()
-        {
-            IReadOnlyList<StorageFile> storageFiles = await folder.GetFilesAsync();
-            if (imageCollection != null)
-                imageCollection.Clear();
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-            {
-                IRandomAccessStream stream = new InMemoryRandomAccessStream();
-                foreach (StorageFile item in storageFiles)
-                {
-                    stream = await item.OpenAsync(FileAccessMode.Read);
-                    imageCollection.Add(new ImageCollection { FileName = item.Name, ImageStream = stream, ImageFile = getBitmapImage(stream) });
-                    await Task.Delay(100);
-                }
-            });
-        }
-
-        private BitmapImage getBitmapImage(IRandomAccessStream indexStream)
-        {
-            BitmapImage bi3 = new BitmapImage();
-            bi3.SetSource(indexStream);
-            return bi3;
-        }
-
-        #endregion
-
-        #region 事件驱动
-
-        private void InkToolbar_Loaded(object sender, RoutedEventArgs e)
-        {
-            InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
-            drawingAttributes.IgnorePressure = false;
-            drawingAttributes.FitToCurve = true;
-
-            inkToolbar.ActiveTool = inkToolbar.GetToolButton(InkToolbarTool.BallpointPen);
-            customPen.CustomPen = new UsualPen();
-            customPen.Palette = PanelColors.ToolColors;
-        }
-
-        private void flyoutBase_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
-            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
-        }
-
-        private void inkCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            size_hight.Text = (inkCanvas.ActualHeight / 2.5).ToString();
-            size_width.Text = (inkCanvas.ActualWidth / 2.5).ToString();
-        }
-
-        #endregion
-
-    }
-
-    public class ImageCollection
-    {
-        public string FileName { get; set; }
-
-        public IRandomAccessStream ImageStream { get; set; }
-
-        public BitmapImage ImageFile { get; set; }
-
-    }
-
-    public class PensCollection
-    {
-        public InkToolbarCustomPen Pen { get; set; }
-
-        public string PenName { get; set; }
     }
 }

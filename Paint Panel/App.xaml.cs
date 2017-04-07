@@ -3,6 +3,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation.Metadata;
 using Windows.Storage;
+using Windows.System.Profile;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -61,7 +62,14 @@ namespace Paint_Panel
                     // 当导航堆栈尚未还原时，导航到第一页，
                     // 并通过将所需信息作为导航参数传入来配置
                     // 参数
-                    rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    if (AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Desktop")
+                    {
+                        rootFrame.Navigate(typeof(MainPage), e.Arguments);
+                    }
+                    else
+                    {
+                        rootFrame.Navigate(typeof(MainPage_Mobile), e.Arguments);
+                    }
                 }
                 // 确保当前窗口处于活动状态
                 Window.Current.Activate();
@@ -83,7 +91,14 @@ namespace Paint_Panel
                     Window.Current.Content = rootframe;
                 }
                 rootframe.BackStack.Clear();
-                rootframe.Navigate(typeof(MainPage), file);
+                if (AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Desktop")
+                {
+                    rootframe.Navigate(typeof(MainPage), file);
+                }
+                else
+                {
+                    rootframe.Navigate(typeof(MainPage_Mobile), file);
+                }
             }
             Window.Current.Activate();
         }

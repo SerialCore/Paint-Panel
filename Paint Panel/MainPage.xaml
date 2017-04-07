@@ -25,9 +25,9 @@
                 <InkToolbar x:Name="inkToolbar" Background="#FF2D2D30" RequestedTheme="Dark" TargetInkCanvas="{x:Bind inkCanvas}"
                             HorizontalAlignment="Center">
                     <InkToolbarCustomPenButton 
-                    x:Name="customPen"
-                    MinStrokeWidth="1" MaxStrokeWidth="20" SelectedStrokeWidth="3"
-                    SelectedBrushIndex ="1">
+                        x:Name="customPen"
+                        MinStrokeWidth="1" MaxStrokeWidth="20" SelectedStrokeWidth="3"
+                        SelectedBrushIndex ="1">
                         <Grid >
                             <TextBlock Text="&#xEC87;" FontSize="17" FontFamily="Segoe MDL2 Assets"/>
                         </Grid>
@@ -37,14 +37,11 @@
                     </InkToolbarCustomPenButton>
                     <InkToolbarCustomToggleButton 
                     x:Name="inputDevice" >
-                        <Grid>
-                            <TextBlock x:Name="inputDevice_icon" Text="&#xED5F;" FontSize="17" FontFamily="Segoe MDL2 Assets"/>
-                            <TextBlock x:Name="inputDevice_icon_mobile" Text="&#xEDC6;" FontSize="17" FontFamily="Segoe MDL2 Assets"/>
-                        </Grid>
+                        <TextBlock x:Name="inputDevice_icon" Text="&#xED5F;" FontSize="17" FontFamily="Segoe MDL2 Assets"/>
                     </InkToolbarCustomToggleButton>
                     <InkToolbarCustomToolButton 
-                    Click="open_Pens" >
-                        <TextBlock Text="&#xEDA8;" FontSize="17" FontFamily="Segoe MDL2 Assets"/>
+                        x:Name="pens_colors" Click="pens_colors_Click">
+                        <TextBlock x:Name="pens_icon" Text="&#xEDA8;" FontSize="17" FontFamily="Segoe MDL2 Assets" />
                     </InkToolbarCustomToolButton>
                 </InkToolbar>
             </Border>
@@ -80,28 +77,24 @@
                         <RowDefinition Height="100"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Padding="5" >
+                    <Grid Grid.Row="0" Padding="5" >
                         <Grid.RowDefinitions>
                             <RowDefinition />
                             <RowDefinition />
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="1.5*"/>
                             <ColumnDefinition Width="120"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Height" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBlock Text="Canvas Height" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         <TextBox x:Name="size_hight" Width="100" Grid.Row="0" Grid.Column="1" InputScope="Number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Text="Width" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBlock Text="Canvas Width" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         <TextBox x:Name="size_width" Width="100" Grid.Row="1" Grid.Column="1" InputScope="Number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <Button Grid.Column="2" Grid.RowSpan="2" Content="Reset" Click="new_size" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
                     </Grid>
-                    <ScrollViewer Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                        <ListView x:Name="color_list" ItemsSource="{Binding myColors}" IsItemClickEnabled="True" ItemClick="color_list_ItemClick" SelectionMode="Single">
+                    <ScrollViewer x:Name="color_list" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                        <ListView ItemsSource="{Binding myColors}" IsItemClickEnabled="True" ItemClick="color_list_ItemClick" SelectionMode="Single">
                             <ListView.ItemTemplate>
                                 <DataTemplate>
                                     <Grid Height="48">
@@ -115,6 +108,18 @@
                                 </DataTemplate>
                             </ListView.ItemTemplate>
                         </ListView>
+                    </ScrollViewer>
+                    <ScrollViewer x:Name="pens_list" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                  Visibility="Collapsed">
+                        <Grid >
+                            <ListView ItemsSource="{Binding pensCollection}" IsItemClickEnabled="True" ItemClick="pen_list_ItemClick"  SelectionMode="Single">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding PenName}" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </Grid>
                     </ScrollViewer>
                 </Grid>
             </Border>
@@ -160,22 +165,6 @@
             </Grid>
 
         </Grid>
-
-        <SplitView x:Name="panel_pens" Margin="0,48,0,0" OpenPaneLength="200" CompactPaneLength="0" PaneBackground="#59000000" DisplayMode="CompactOverlay">
-            <SplitView.Pane>
-                <ScrollViewer Grid.Row="0" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                    <Grid >
-                        <ListView x:Name="pen_list" ItemsSource="{Binding pensCollection}" IsItemClickEnabled="True" ItemClick="pen_list_ItemClick"  SelectionMode="Single">
-                            <ListView.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding PenName}" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
-                                </DataTemplate>
-                            </ListView.ItemTemplate>
-                        </ListView>
-                    </Grid>
-                </ScrollViewer>
-            </SplitView.Pane>
-        </SplitView>
 
     </Grid>
 
