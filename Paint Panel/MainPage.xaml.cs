@@ -90,6 +90,8 @@ namespace Paint_Panel
             }
         }
 
+        #region 用户操作
+
         private void inputDevice_Click(object sender, RoutedEventArgs e)
         {
             if (inputDevice.IsChecked == true)
@@ -116,17 +118,6 @@ namespace Paint_Panel
                 this.inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse
                 | Windows.UI.Core.CoreInputDeviceTypes.Touch;
             }
-        }
-
-        private void InkToolbar_Loaded(object sender, RoutedEventArgs e)
-        {
-            InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
-            drawingAttributes.IgnorePressure = false;
-            drawingAttributes.FitToCurve = true;
-
-            inkToolbar.ActiveTool = inkToolbar.GetToolButton(InkToolbarTool.BallpointPen);
-            customPen.CustomPen = new UsualPen();
-            customPen.Palette = PanelColors.ToolColors;
         }
 
         private async void save_composite(object sender, RoutedEventArgs e)
@@ -233,36 +224,6 @@ namespace Paint_Panel
             }
         }
 
-        private void clear_img(object sender, RoutedEventArgs e)
-        {
-            restore_image();
-            if (x != null)
-            {
-                x.Dispose();
-                x = null;
-            }
-        }
-
-        private async void restore_image()
-        {
-            if (AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Desktop")
-            {
-                StorageFile image_file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Background/PC_Background.png"));
-                BitmapImage image = new BitmapImage();
-                x = await image_file.OpenAsync(FileAccessMode.Read);
-                image.SetSource(x);
-                back_image.Source = image;
-            }
-            else
-            {
-                StorageFile image_file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Background/Mobile_Background.png"));
-                BitmapImage image = new BitmapImage();
-                x = await image_file.OpenAsync(FileAccessMode.Read);
-                image.SetSource(x);
-                back_image.Source = image;
-            }
-        }
-
         private async void open_ink(object sender, RoutedEventArgs e)
         {
             var picker = new FileOpenPicker
@@ -306,15 +267,6 @@ namespace Paint_Panel
             }
         }
 
-        private async Task<byte[]> ConvertImagetoByte(IRandomAccessStream fileStream)
-        {
-            var reader = new DataReader(fileStream.GetInputStreamAt(0));
-            await reader.LoadAsync((uint)fileStream.Size);
-            byte[] pixels = new byte[fileStream.Size];
-            reader.ReadBytes(pixels);
-            return pixels;
-        }
-
         private void ink_undo(object sender, RoutedEventArgs e)
         {
             IReadOnlyList<InkStroke> strokes = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
@@ -326,11 +278,6 @@ namespace Paint_Panel
             }
         }
 
-        private void choose_color(object sender, RoutedEventArgs e)
-        {
-            panel_colors.IsPaneOpen = !panel_colors.IsPaneOpen;
-        }
-
         private void color_list_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as MyColors;
@@ -338,37 +285,10 @@ namespace Paint_Panel
             currentColor = item.IndexColor;
         }
 
-        private void flyoutBase_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
-            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
-        }
-
         private void pen_list_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as PensCollection;
-            switch (item.PenName)
-            {
-                case "Usual Pen":
-                    customPen.CustomPen = item.Pen;
-                    break;
-                case "Marker Pen":
-                    customPen.CustomPen = item.Pen;
-                    break;
-                case "Calligraphy Pen":
-                    customPen.CustomPen = item.Pen;
-                    break;
-                case "Pencil Brush":
-                    customPen.CustomPen = item.Pen;
-                    break;
-                case "Ink Brush":
-                    customPen.CustomPen = item.Pen;
-                    break;
-            }
-        }
-
-        private void open_Pens(object sender, RoutedEventArgs e)
-        {
-            panel_pens.IsPaneOpen = !panel_pens.IsPaneOpen;
+            customPen.CustomPen = item.Pen;
         }
 
         private async void new_size(object sender, RoutedEventArgs e)
@@ -403,30 +323,6 @@ namespace Paint_Panel
                 sizePanel.Visibility = Visibility.Collapsed;
             else
                 sizePanel.Visibility = Visibility.Visible;
-        }
-
-        private async void refreshList()
-        {
-            IReadOnlyList<StorageFile> storageFiles = await folder.GetFilesAsync();
-            if (imageCollection != null)
-                imageCollection.Clear();
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-            {
-                IRandomAccessStream stream = new InMemoryRandomAccessStream();
-                foreach (StorageFile item in storageFiles)
-                {
-                    stream = await item.OpenAsync(FileAccessMode.Read);
-                    imageCollection.Add(new ImageCollection { FileName = item.Name, ImageStream = stream, ImageFile = getBitmapImage(stream) });
-                    await Task.Delay(100);
-                }
-            });
-        }
-
-        private BitmapImage getBitmapImage(IRandomAccessStream indexStream)
-        {
-            BitmapImage bi3 = new BitmapImage();
-            bi3.SetSource(indexStream);
-            return bi3;
         }
 
         private async void collection_addnew(object sender, RoutedEventArgs e)
@@ -528,6 +424,105 @@ namespace Paint_Panel
             }
         }
 
+        #endregion
+
+        #region 方法调用
+
+        private void clear_img(object sender, RoutedEventArgs e)
+        {
+            restore_image();
+            if (x != null)
+            {
+                x.Dispose();
+                x = null;
+            }
+        }
+
+        private async void restore_image()
+        {
+            if (AnalyticsInfo.VersionInfo.DeviceFamily == "Windows.Desktop")
+            {
+                StorageFile image_file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Background/PC_Background.png"));
+                BitmapImage image = new BitmapImage();
+                x = await image_file.OpenAsync(FileAccessMode.Read);
+                image.SetSource(x);
+                back_image.Source = image;
+            }
+            else
+            {
+                StorageFile image_file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Background/Mobile_Background.png"));
+                BitmapImage image = new BitmapImage();
+                x = await image_file.OpenAsync(FileAccessMode.Read);
+                image.SetSource(x);
+                back_image.Source = image;
+            }
+        }
+
+        private async Task<byte[]> ConvertImagetoByte(IRandomAccessStream fileStream)
+        {
+            var reader = new DataReader(fileStream.GetInputStreamAt(0));
+            await reader.LoadAsync((uint)fileStream.Size);
+            byte[] pixels = new byte[fileStream.Size];
+            reader.ReadBytes(pixels);
+            return pixels;
+        }
+
+        private async void refreshList()
+        {
+            IReadOnlyList<StorageFile> storageFiles = await folder.GetFilesAsync();
+            if (imageCollection != null)
+                imageCollection.Clear();
+            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
+            {
+                IRandomAccessStream stream = new InMemoryRandomAccessStream();
+                foreach (StorageFile item in storageFiles)
+                {
+                    stream = await item.OpenAsync(FileAccessMode.Read);
+                    imageCollection.Add(new ImageCollection { FileName = item.Name, ImageStream = stream, ImageFile = getBitmapImage(stream) });
+                    await Task.Delay(100);
+                }
+            });
+        }
+
+        private BitmapImage getBitmapImage(IRandomAccessStream indexStream)
+        {
+            BitmapImage bi3 = new BitmapImage();
+            bi3.SetSource(indexStream);
+            return bi3;
+        }
+
+        #endregion
+
+        #region 事件驱动
+
+        private void InkToolbar_Loaded(object sender, RoutedEventArgs e)
+        {
+            InkDrawingAttributes drawingAttributes = new InkDrawingAttributes();
+            drawingAttributes.IgnorePressure = false;
+            drawingAttributes.FitToCurve = true;
+
+            inkToolbar.ActiveTool = inkToolbar.GetToolButton(InkToolbarTool.BallpointPen);
+            customPen.CustomPen = new UsualPen();
+            customPen.Palette = PanelColors.ToolColors;
+        }
+
+        private void flyoutBase_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        {
+            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
+        }
+
+        private void inkCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            size_hight.Text = inkCanvas.ActualHeight.ToString();
+            size_width.Text = inkCanvas.ActualWidth.ToString();
+        }
+
+        private void open_Pens(object sender, RoutedEventArgs e)
+        {
+            panel_pens.IsPaneOpen = !panel_pens.IsPaneOpen;
+        }
+
+        #endregion
     }
 
     public class ImageCollection
