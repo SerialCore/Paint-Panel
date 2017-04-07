@@ -30,7 +30,7 @@
                     </InkToolbarCustomPenButton.ConfigurationContent>
                 </InkToolbarCustomPenButton>
                 <InkToolbarCustomToggleButton 
-                    x:Name="inputDevice" >
+                    x:Name="inputDevice" Click="inputDevice_Click_Mobile">
                     <TextBlock x:Name="inputDevice_icon_mobile" Text="&#xEDC6;" FontSize="17" FontFamily="Segoe MDL2 Assets"/>
                 </InkToolbarCustomToggleButton>
                 <InkToolbarCustomToolButton 

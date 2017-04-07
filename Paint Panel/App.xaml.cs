@@ -111,9 +111,6 @@ namespace Paint_Panel
                 await Windows.UI.ViewManagement.StatusBar.GetForCurrentView().HideAsync();
             }
 
-            // 横屏
-            Windows.Graphics.Display.DisplayInformation.AutoRotationPreferences = Windows.Graphics.Display.DisplayOrientations.Landscape;
-
             // 全屏
             Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
 

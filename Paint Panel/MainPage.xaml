@@ -36,7 +36,7 @@
                         </InkToolbarCustomPenButton.ConfigurationContent>
                     </InkToolbarCustomPenButton>
                     <InkToolbarCustomToggleButton 
-                    x:Name="inputDevice" >
+                    x:Name="inputDevice" Click="inputDevice_Click">
                         <TextBlock x:Name="inputDevice_icon" Text="&#xED5F;" FontSize="17" FontFamily="Segoe MDL2 Assets"/>
                     </InkToolbarCustomToggleButton>
                     <InkToolbarCustomToolButton 
@@ -46,7 +46,7 @@
                 </InkToolbar>
             </Border>
 
-            <!--<ScrollViewer Grid.Row="1" Grid.Column="0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+            <ScrollViewer Grid.Row="1" Grid.Column="0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
                 <Viewbox Stretch="Uniform" StretchDirection="Both" >
                     <ScrollViewer ZoomMode="Enabled" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" >
                         <Grid x:Name="uiElement">
@@ -56,16 +56,7 @@
                         </Grid>
                     </ScrollViewer>
                 </Viewbox>
-            </ScrollViewer>-->
-            <Viewbox Grid.Row="1" Grid.Column="0" Stretch="Uniform" StretchDirection="Both" >
-                <ScrollViewer ZoomMode="Enabled" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" >
-                    <Grid x:Name="uiElement">
-                        <Rectangle x:Name="panel_color" Fill="White" />
-                        <Image x:Name="back_image" />
-                        <InkCanvas x:Name="inkCanvas" SizeChanged="inkCanvas_SizeChanged"/>
-                    </Grid>
-                </ScrollViewer>
-            </Viewbox>
+            </ScrollViewer>
 
             <Border Grid.Row="0" Grid.Column="1" Background="#FF2D2D30">
 
