@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="16496zhwx.PaintPanel" Publisher="CN=73D1BF38-7322-4954-A5E9-541DD3BC2D66" Version="2.8.74.0" />
+  <Identity Name="16496zhwx.PaintPanel" Publisher="CN=73D1BF38-7322-4954-A5E9-541DD3BC2D66" Version="2.8.79.0" />
   <mp:PhoneIdentity PhoneProductId="1eb9016b-c192-4a46-9806-499b8876db0b" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Paint Panel</DisplayName>

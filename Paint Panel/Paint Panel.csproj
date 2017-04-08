@@ -20,6 +20,7 @@
     <PackageCertificateThumbprint>D63252956A28DF25EB139BE446A366BD8DC76BF4</PackageCertificateThumbprint>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
+    <AppxBundle>Auto</AppxBundle>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -94,13 +95,6 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="Paint Panel_StoreKey.pfx" />
     <None Include="project.json" />
-    <PRIResource Include="Strings\ko\Resources.resw" />
-    <PRIResource Include="Strings\de\Resources.resw" />
-    <PRIResource Include="Strings\fr\Resources.resw" />
-    <PRIResource Include="Strings\ru-ru\Resources.resw" />
-    <PRIResource Include="Strings\ja-jp\Resources.resw" />
-    <PRIResource Include="Strings\zh\Resources.resw" />
-    <PRIResource Include="Strings\en\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
