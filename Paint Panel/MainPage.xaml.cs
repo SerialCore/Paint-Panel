@@ -298,14 +298,6 @@ namespace Paint_Panel
             back_image.Source = bi3;
         }
 
-        private void show_sizePanel(object sender, RoutedEventArgs e)
-        {
-            if (sizePanel_control.IsChecked == true)
-                sizePanel.Visibility = Visibility.Collapsed;
-            else
-                sizePanel.Visibility = Visibility.Visible;
-        }
-
         private async void collection_addnew(object sender, RoutedEventArgs e)
         {
             FileOpenPicker picker = new FileOpenPicker();
@@ -403,6 +395,11 @@ namespace Paint_Panel
                 ToastNotification notification = new ToastNotification(Control.ToastCollection.SaveSuccessfull.GetXml());
                 ToastNotificationManager.CreateToastNotifier().Show(notification);
             }
+        }
+
+        private void open_functions(object sender, RoutedEventArgs e)
+        {
+            collection_panel.IsPaneOpen = !collection_panel.IsPaneOpen;
         }
 
         #endregion

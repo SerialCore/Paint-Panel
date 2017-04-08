@@ -22,6 +22,7 @@
             </Grid.ColumnDefinitions>
 
             <Border Grid.Row="0" Grid.Column="0" Background="#FF2D2D30">
+
                 <InkToolbar x:Name="inkToolbar" Background="#FF2D2D30" RequestedTheme="Dark" TargetInkCanvas="{x:Bind inkCanvas}"
                             HorizontalAlignment="Center">
                     <InkToolbarCustomPenButton 
@@ -29,7 +30,7 @@
                         MinStrokeWidth="1" MaxStrokeWidth="20" SelectedStrokeWidth="3"
                         SelectedBrushIndex ="1">
                         <Grid >
-                            <TextBlock Text="&#xEC87;" FontSize="17" FontFamily="Segoe MDL2 Assets"/>
+                            <TextBlock Text="&#xEDFB;" FontSize="17" FontFamily="Segoe MDL2 Assets"/>
                         </Grid>
                         <InkToolbarCustomPenButton.ConfigurationContent>
                             <InkToolbarPenConfigurationControl />
@@ -46,6 +47,10 @@
                 </InkToolbar>
             </Border>
 
+            <Button Click="open_functions" Height="48" Width="48" Foreground="White" Background="#FF2D2D30" HorizontalAlignment="Left">
+                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF0B4;" />
+            </Button>
+
             <ScrollViewer Grid.Row="1" Grid.Column="0" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
                 <Viewbox Stretch="Uniform" StretchDirection="Both" >
                     <ScrollViewer ZoomMode="Enabled" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" >
@@ -59,7 +64,42 @@
             </ScrollViewer>
 
             <Border Grid.Row="0" Grid.Column="1" Background="#FF2D2D30">
-
+                <StackPanel Orientation="Horizontal">
+                    <Button Click="ink_undo" Foreground="White" Background="#FF2D2D30" Height="48" Width="48">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE845;" />
+                    </Button>
+                    <Button Tapped="flyoutBase_Tapped" Foreground="White" Background="#FF2D2D30" Height="48" Width="48">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE197;" />
+                        <FlyoutBase.AttachedFlyout>
+                            <MenuFlyout>
+                                <MenuFlyoutItem Text="Open Image" Click="pick_img"/>
+                                <MenuFlyoutItem Text="Open Ink" Click="open_ink"/>
+                                <MenuFlyoutItem Text="Default Set" Click="clear_img"/>
+                            </MenuFlyout>
+                        </FlyoutBase.AttachedFlyout>
+                    </Button>
+                    <Button Tapped="flyoutBase_Tapped" Foreground="White" Background="#FF2D2D30" Height="48" Width="48">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE105;" />
+                        <FlyoutBase.AttachedFlyout>
+                            <MenuFlyout >
+                                <MenuFlyoutSubItem Text="Save as Image">
+                                    <MenuFlyoutItem Text="Composite Image" Click="save_composite"/>
+                                    <MenuFlyoutItem Text="Ink with Background" Click="save_colorInk"/>
+                                    <MenuFlyoutItem Text="Ink without Background" Click="save_nocolorInk"/>
+                                </MenuFlyoutSubItem>
+                                <MenuFlyoutSubItem Text="Save to Collection">
+                                    <MenuFlyoutItem Text="Composite Image" Click="collection_composite"/>
+                                    <MenuFlyoutItem Text="Ink with Background" Click="collection_colorInk"/>
+                                    <MenuFlyoutItem Text="Ink without Background" Click="collection_nocolorInk"/>
+                                </MenuFlyoutSubItem>
+                                <MenuFlyoutItem Text="Save as Ink" Click="save_ink"/>
+                            </MenuFlyout>
+                        </FlyoutBase.AttachedFlyout>
+                    </Button>
+                    <Button Click="share_img" Foreground="White" Background="#FF2D2D30" Height="48" Width="48">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72D;" />
+                    </Button>
+                </StackPanel>
             </Border>
 
             <Border Grid.Row="1" Grid.Column="1" Background="#FFF0F2F3" RequestedTheme="Light">
@@ -82,7 +122,7 @@
                         <TextBox x:Name="size_hight" Width="100" Grid.Row="0" Grid.Column="1" InputScope="Number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         <TextBlock Text="Canvas Width" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         <TextBox x:Name="size_width" Width="100" Grid.Row="1" Grid.Column="1" InputScope="Number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Button Grid.Column="2" Grid.RowSpan="2" Content="Reset" Click="new_size" HorizontalAlignment="Left" VerticalAlignment="Stretch" Height="48" Width="55" Background="#FF5156DC"/>
+                        <Button Grid.Column="2" Grid.RowSpan="2" Content="Reset" Click="new_size" HorizontalAlignment="Left" VerticalAlignment="Stretch" Height="48" Width="55" Foreground="White" Background="#FF5156DC"/>
                     </Grid>
                     <ScrollViewer x:Name="color_list" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                         <ListView ItemsSource="{Binding myColors}" IsItemClickEnabled="True" ItemClick="color_list_ItemClick" SelectionMode="Single">
@@ -115,19 +155,25 @@
                 </Grid>
             </Border>
 
-            <Grid x:Name="sizePanel" Grid.Row="1" Padding="5" Background="#59000000" RequestedTheme="Dark" >
+        </Grid>
+
+        <SplitView x:Name="collection_panel" OpenPaneLength="300" CompactPaneLength="0" PaneBackground="#FFF0F2F3" DisplayMode="CompactOverlay" Margin="0,48,0,0">
+            <SplitView.Pane>
                 <Grid Padding="5" >
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="35"/>
                         <RowDefinition Height="24"/>
                         <RowDefinition />
-                        <RowDefinition Height="35"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition />
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Row="0" Grid.ColumnSpan="3" Text="Favourite Backgrounds Collection" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Button Grid.Row="0" Grid.Column="0" Content="Addnew" Click="collection_addnew" Foreground="White" Background="#FF5156DC" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+                    <Button Grid.Row="0" Grid.Column="1" Content="Choose" Click="collection_choose" Foreground="White" Background="#FF5156DC" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+                    <Button Grid.Row="0" Grid.Column="2" Content="Delete" Click="collection_delete" Foreground="White" Background="#FF5156DC" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Row="1" Grid.ColumnSpan="3" Text="Favourite Backgrounds Collection" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <!--<controls:AdaptiveGridView Name="control"
                                    Grid.Row="1" Grid.ColumnSpan="3"
                                    OneRowModeEnabled="False"
@@ -141,64 +187,18 @@
                             <Image Source="{Binding ImageFile}" Stretch="UniformToFill" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </DataTemplate>
                     </controls:AdaptiveGridView>-->
-                    <GridView Grid.Row="1" Grid.ColumnSpan="3" ItemsSource="{Binding imageCollection}" 
+                    <GridView Grid.Row="2" Grid.ColumnSpan="3" ItemsSource="{Binding imageCollection}" 
                               SelectionMode="Single" IsItemClickEnabled="True" ItemClick="image_ItemClick">
                         <GridView.ItemTemplate>
                             <DataTemplate>
-                                <Image Source="{Binding ImageFile}" Stretch="UniformToFill" Height="200" Width="125" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Image Source="{Binding ImageFile}" Stretch="UniformToFill" Height="95" Width="140" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             </DataTemplate>
                         </GridView.ItemTemplate>
                     </GridView>
-                    <Button Grid.Row="2" Grid.Column="0" x:Name="payButton" Content="Addnew" Click="collection_addnew" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
-                    <Button Grid.Row="2" Grid.Column="1" Content="Choose" Click="collection_choose" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
-                    <Button Grid.Row="2" Grid.Column="2" Content="Delete" Click="collection_delete" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
                 </Grid>
-            </Grid>
-
-        </Grid>
+            </SplitView.Pane>
+        </SplitView>
 
     </Grid>
-
-    <Page.BottomAppBar>
-        <CommandBar Background="#FF2D2D30" RequestedTheme="Dark">
-            <AppBarToggleButton x:Name="sizePanel_control" Label="Paint" Click="show_sizePanel" >
-                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE929;" />
-            </AppBarToggleButton>
-            <AppBarButton Label="Undo" Click="ink_undo">
-                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE845;" />
-            </AppBarButton>
-            <AppBarButton Label="Open" Tapped="flyoutBase_Tapped" >
-                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE197;" />
-                <FlyoutBase.AttachedFlyout>
-                    <MenuFlyout>
-                        <MenuFlyoutItem Text="Open Image" Click="pick_img"/>
-                        <MenuFlyoutItem Text="Open Ink" Click="open_ink"/>
-                        <MenuFlyoutItem Text="Default Set" Click="clear_img"/>
-                    </MenuFlyout>
-                </FlyoutBase.AttachedFlyout>
-            </AppBarButton>
-            <AppBarButton Label="Save" Tapped="flyoutBase_Tapped" >
-                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE105;" />
-                <FlyoutBase.AttachedFlyout>
-                    <MenuFlyout>
-                        <MenuFlyoutSubItem Text="Save as Image">
-                            <MenuFlyoutItem Text="Composite Image" Click="save_composite"/>
-                            <MenuFlyoutItem Text="Ink with Background" Click="save_colorInk"/>
-                            <MenuFlyoutItem Text="Ink without Background" Click="save_nocolorInk"/>
-                        </MenuFlyoutSubItem>
-                        <MenuFlyoutSubItem Text="Save to Collection">
-                            <MenuFlyoutItem Text="Composite Image" Click="collection_composite"/>
-                            <MenuFlyoutItem Text="Ink with Background" Click="collection_colorInk"/>
-                            <MenuFlyoutItem Text="Ink without Background" Click="collection_nocolorInk"/>
-                        </MenuFlyoutSubItem>
-                        <MenuFlyoutItem Text="Save as Ink" Click="save_ink"/>
-                    </MenuFlyout>
-                </FlyoutBase.AttachedFlyout>
-            </AppBarButton>
-            <AppBarButton Label="Share" Click="share_img">
-                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72D;" />
-            </AppBarButton>
-        </CommandBar>
-    </Page.BottomAppBar>
 
 </Page>
