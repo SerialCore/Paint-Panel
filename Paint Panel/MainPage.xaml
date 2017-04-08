@@ -72,9 +72,9 @@
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE197;" />
                         <FlyoutBase.AttachedFlyout>
                             <MenuFlyout>
-                                <MenuFlyoutItem Text="Open Image" Click="pick_img"/>
-                                <MenuFlyoutItem Text="Open Ink" Click="open_ink"/>
-                                <MenuFlyoutItem Text="Default Set" Click="clear_img"/>
+                                <MenuFlyoutItem x:Uid="OpenImage" Text="Open Image" Foreground="Black" Click="pick_img"/>
+                                <MenuFlyoutItem x:Uid="OpenInk" Text="Open Ink" Foreground="Black" Click="open_ink"/>
+                                <MenuFlyoutItem x:Uid="DefaultSet" Text="Default Set" Foreground="Black" Click="clear_img"/>
                             </MenuFlyout>
                         </FlyoutBase.AttachedFlyout>
                     </Button>
@@ -82,17 +82,17 @@
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE105;" />
                         <FlyoutBase.AttachedFlyout>
                             <MenuFlyout >
-                                <MenuFlyoutSubItem Text="Save as Image">
-                                    <MenuFlyoutItem Text="Composite Image" Click="save_composite"/>
-                                    <MenuFlyoutItem Text="Ink with Background" Click="save_colorInk"/>
-                                    <MenuFlyoutItem Text="Ink without Background" Click="save_nocolorInk"/>
+                                <MenuFlyoutSubItem x:Uid="SaveAsImage" Text="Save as Image" Foreground="Black">
+                                    <MenuFlyoutItem x:Uid="CompositeImage" Text="Composite Image" Foreground="Black" Click="save_composite"/>
+                                    <MenuFlyoutItem x:Uid="InkwithBackground" Text="Ink with Background" Foreground="Black" Click="save_colorInk"/>
+                                    <MenuFlyoutItem x:Uid="InkwithoutBackground" Text="Ink without Background" Foreground="Black" Click="save_nocolorInk"/>
                                 </MenuFlyoutSubItem>
-                                <MenuFlyoutSubItem Text="Save to Collection">
-                                    <MenuFlyoutItem Text="Composite Image" Click="collection_composite"/>
-                                    <MenuFlyoutItem Text="Ink with Background" Click="collection_colorInk"/>
-                                    <MenuFlyoutItem Text="Ink without Background" Click="collection_nocolorInk"/>
+                                <MenuFlyoutSubItem x:Uid="SaveToCollection" Text="Save to Collection" Foreground="Black">
+                                    <MenuFlyoutItem x:Uid="CompositeImage" Text="Composite Image" Foreground="Black" Click="collection_composite"/>
+                                    <MenuFlyoutItem x:Uid="InkwithBackground" Text="Ink with Background" Foreground="Black" Click="collection_colorInk"/>
+                                    <MenuFlyoutItem x:Uid="InkwithoutBackground" Text="Ink without Background" Foreground="Black" Click="collection_nocolorInk"/>
                                 </MenuFlyoutSubItem>
-                                <MenuFlyoutItem Text="Save as Ink" Click="save_ink"/>
+                                <MenuFlyoutItem x:Uid="SaveAsInk" Text="Save as Ink" Foreground="Black" Click="save_ink"/>
                             </MenuFlyout>
                         </FlyoutBase.AttachedFlyout>
                     </Button>
@@ -118,11 +118,11 @@
                             <ColumnDefinition Width="120"/>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
-                        <TextBlock Text="Canvas Height" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBlock x:Uid="CanvasHeight" Text="Canvas Height" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         <TextBox x:Name="size_hight" Width="100" Grid.Row="0" Grid.Column="1" InputScope="Number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <TextBlock Text="Canvas Width" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                        <TextBlock x:Uid="CanvasWidth" Text="Canvas Width" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Right" VerticalAlignment="Center"/>
                         <TextBox x:Name="size_width" Width="100" Grid.Row="1" Grid.Column="1" InputScope="Number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                        <Button Grid.Column="2" Grid.RowSpan="2" Content="Reset" Click="new_size" HorizontalAlignment="Left" VerticalAlignment="Stretch" Height="48" Width="55" Foreground="White" Background="#FF5156DC"/>
+                        <Button x:Uid="SizeSet" Grid.Column="2" Grid.RowSpan="2" Content="Reset" Click="new_size" HorizontalAlignment="Left" VerticalAlignment="Stretch" Height="48" Width="55" Foreground="White" Background="#FF5156DC"/>
                     </Grid>
                     <ScrollViewer x:Name="color_list" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                         <ListView ItemsSource="{Binding myColors}" IsItemClickEnabled="True" ItemClick="color_list_ItemClick" SelectionMode="Single">
@@ -170,10 +170,10 @@
                         <ColumnDefinition />
                         <ColumnDefinition />
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Row="0" Grid.Column="0" Content="Addnew" Click="collection_addnew" Foreground="White" Background="#FF5156DC" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
-                    <Button Grid.Row="0" Grid.Column="1" Content="Choose" Click="collection_choose" Foreground="White" Background="#FF5156DC" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
-                    <Button Grid.Row="0" Grid.Column="2" Content="Delete" Click="collection_delete" Foreground="White" Background="#FF5156DC" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
-                    <TextBlock Grid.Row="1" Grid.ColumnSpan="3" Text="Favourite Backgrounds Collection" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <Button x:Uid="AddNew" Grid.Row="0" Grid.Column="0" Content="Addnew" Click="collection_addnew" Foreground="White" Background="#FF5156DC" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+                    <Button x:Uid="Choose" Grid.Row="0" Grid.Column="1" Content="Choose" Click="collection_choose" Foreground="White" Background="#FF5156DC" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+                    <Button x:Uid="Delete" Grid.Row="0" Grid.Column="2" Content="Delete" Click="collection_delete" Foreground="White" Background="#FF5156DC" VerticalAlignment="Stretch" HorizontalAlignment="Center"/>
+                    <TextBlock x:Uid="Favourite" Grid.Row="1" Grid.ColumnSpan="3" Text="Favourite Backgrounds Collection" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <!--<controls:AdaptiveGridView Name="control"
                                    Grid.Row="1" Grid.ColumnSpan="3"
                                    OneRowModeEnabled="False"
