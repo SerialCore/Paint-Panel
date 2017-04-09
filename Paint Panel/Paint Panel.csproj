@@ -9,8 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Paint_Panel</RootNamespace>
     <AssemblyName>Paint Panel</AssemblyName>
-    <DefaultLanguage>
-    </DefaultLanguage>
+    <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.15063.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
@@ -96,13 +95,7 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="Paint Panel_StoreKey.pfx" />
     <None Include="project.json" />
-    <PRIResource Include="Strings\de\Resources.resw" />
     <PRIResource Include="Strings\zh\Resources.resw" />
-    <PRIResource Include="Strings\ru-ru\Resources.resw" />
-    <PRIResource Include="Strings\ko\Resources.resw" />
-    <PRIResource Include="Strings\ja-jp\Resources.resw" />
-    <PRIResource Include="Strings\fr\Resources.resw" />
-    <PRIResource Include="Strings\en\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">

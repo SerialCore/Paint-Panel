@@ -67,16 +67,6 @@ namespace Paint_Panel
         private Color currentColor = PanelColors.White;    //当前选定的背景颜色
         private ImageCollection currentImageItem = null;    //当前选定的背景集合项目
 
-        protected override async void OnNavigatedTo(NavigationEventArgs e)
-        {
-            var file = e.Parameter as IRandomAccessStreamWithContentType;
-            if (file != null)
-            {
-                await inkCanvas.InkPresenter.StrokeContainer.LoadAsync(file);
-                return;
-            }
-        }
-
         #region 用户操作
 
         private void inputDevice_Click(object sender, RoutedEventArgs e)
@@ -461,6 +451,16 @@ namespace Paint_Panel
         #endregion
 
         #region 事件驱动
+
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            var file = e.Parameter as IRandomAccessStreamWithContentType;
+            if (file != null)
+            {
+                await inkCanvas.InkPresenter.StrokeContainer.LoadAsync(file);
+                return;
+            }
+        }
 
         private void InkToolbar_Loaded(object sender, RoutedEventArgs e)
         {

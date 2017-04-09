@@ -1,1 +1,1 @@
-E:\UWP\Paint Panel\Paint Panel\bin\x86\Release\Upload\Paint Panel_2.8.82.0\Paint Panel_2.8.82.0_x86_x64.appxbundle
+E:\UWP\Paint Panel\Paint Panel\bin\x64\Release\Upload\Paint Panel_2.8.85.0\Paint Panel_2.8.85.0_x86_x64.appxbundle
