@@ -64,39 +64,39 @@
             </ScrollViewer>
 
             <Border Grid.Row="0" Grid.Column="1" Background="#FF2D2D30">
-                <StackPanel Orientation="Horizontal">
-                    <Button Click="ink_undo" Foreground="White" Background="#FF2D2D30" Height="48" Width="48">
+                <StackPanel Orientation="Horizontal" RequestedTheme="Dark">
+                    <Button Click="ink_undo" Background="#FF2D2D30" Height="48" Width="48">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE845;" />
                     </Button>
-                    <Button Tapped="flyoutBase_Tapped" Foreground="White" Background="#FF2D2D30" Height="48" Width="48">
+                    <Button Tapped="flyoutBase_Tapped" Background="#FF2D2D30" Height="48" Width="48">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE197;" />
                         <FlyoutBase.AttachedFlyout>
                             <MenuFlyout>
-                                <MenuFlyoutItem x:Uid="OpenImage" Text="Open Image" Foreground="Black" Click="pick_img"/>
-                                <MenuFlyoutItem x:Uid="OpenInk" Text="Open Ink" Foreground="Black" Click="open_ink"/>
-                                <MenuFlyoutItem x:Uid="DefaultSet" Text="Default Set" Foreground="Black" Click="clear_img"/>
+                                <MenuFlyoutItem x:Uid="OpenImage" Text="Open Image" Click="pick_img"/>
+                                <MenuFlyoutItem x:Uid="OpenInk" Text="Open Ink" Click="open_ink"/>
+                                <MenuFlyoutItem x:Uid="DefaultSet" Text="Default Set" Click="clear_img"/>
                             </MenuFlyout>
                         </FlyoutBase.AttachedFlyout>
                     </Button>
-                    <Button Tapped="flyoutBase_Tapped" Foreground="White" Background="#FF2D2D30" Height="48" Width="48">
+                    <Button Tapped="flyoutBase_Tapped" Background="#FF2D2D30" Height="48" Width="48">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE105;" />
                         <FlyoutBase.AttachedFlyout>
                             <MenuFlyout >
-                                <MenuFlyoutSubItem x:Uid="SaveAsImage" Text="Save as Image" Foreground="Black">
-                                    <MenuFlyoutItem x:Uid="CompositeImage" Text="Composite Image" Foreground="Black" Click="save_composite"/>
-                                    <MenuFlyoutItem x:Uid="InkwithBackground" Text="Ink with Background" Foreground="Black" Click="save_colorInk"/>
-                                    <MenuFlyoutItem x:Uid="InkwithoutBackground" Text="Ink without Background" Foreground="Black" Click="save_nocolorInk"/>
+                                <MenuFlyoutSubItem x:Uid="SaveAsImage" Text="Save as Image">
+                                    <MenuFlyoutItem x:Uid="CompositeImage" Text="Composite Image" Click="save_composite"/>
+                                    <MenuFlyoutItem x:Uid="InkwithBackground" Text="Ink with Background" Click="save_colorInk"/>
+                                    <MenuFlyoutItem x:Uid="InkwithoutBackground" Text="Ink without Background" Click="save_nocolorInk"/>
                                 </MenuFlyoutSubItem>
-                                <MenuFlyoutSubItem x:Uid="SaveToCollection" Text="Save to Collection" Foreground="Black">
-                                    <MenuFlyoutItem x:Uid="CompositeImage" Text="Composite Image" Foreground="Black" Click="collection_composite"/>
-                                    <MenuFlyoutItem x:Uid="InkwithBackground" Text="Ink with Background" Foreground="Black" Click="collection_colorInk"/>
-                                    <MenuFlyoutItem x:Uid="InkwithoutBackground" Text="Ink without Background" Foreground="Black" Click="collection_nocolorInk"/>
+                                <MenuFlyoutSubItem x:Uid="SaveToCollection" Text="Save to Collection">
+                                    <MenuFlyoutItem x:Uid="CompositeImage" Text="Composite Image" Click="collection_composite"/>
+                                    <MenuFlyoutItem x:Uid="InkwithBackground" Text="Ink with Background" Click="collection_colorInk"/>
+                                    <MenuFlyoutItem x:Uid="InkwithoutBackground" Text="Ink without Background" Click="collection_nocolorInk"/>
                                 </MenuFlyoutSubItem>
-                                <MenuFlyoutItem x:Uid="SaveAsInk" Text="Save as Ink" Foreground="Black" Click="save_ink"/>
+                                <MenuFlyoutItem x:Uid="SaveAsInk" Text="Save as Ink" Click="save_ink"/>
                             </MenuFlyout>
                         </FlyoutBase.AttachedFlyout>
                     </Button>
-                    <Button Click="share_img" Foreground="White" Background="#FF2D2D30" Height="48" Width="48">
+                    <Button Click="share_img" Background="#FF2D2D30" Height="48" Width="48">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72D;" />
                     </Button>
                 </StackPanel>

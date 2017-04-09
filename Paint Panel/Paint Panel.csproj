@@ -9,7 +9,8 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Paint_Panel</RootNamespace>
     <AssemblyName>Paint Panel</AssemblyName>
-    <DefaultLanguage>zh-CN</DefaultLanguage>
+    <DefaultLanguage>
+    </DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
     <TargetPlatformVersion>10.0.15063.0</TargetPlatformVersion>
     <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
@@ -19,8 +20,8 @@
     <PackageCertificateKeyFile>Paint Panel_StoreKey.pfx</PackageCertificateKeyFile>
     <PackageCertificateThumbprint>D63252956A28DF25EB139BE446A366BD8DC76BF4</PackageCertificateThumbprint>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
-    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <AppxBundle>Auto</AppxBundle>
+    <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
+    <AppxBundle>Always</AppxBundle>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
     <DebugSymbols>true</DebugSymbols>
@@ -95,6 +96,13 @@
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
     <None Include="Paint Panel_StoreKey.pfx" />
     <None Include="project.json" />
+    <PRIResource Include="Strings\de\Resources.resw" />
+    <PRIResource Include="Strings\zh\Resources.resw" />
+    <PRIResource Include="Strings\ru-ru\Resources.resw" />
+    <PRIResource Include="Strings\ko\Resources.resw" />
+    <PRIResource Include="Strings\ja-jp\Resources.resw" />
+    <PRIResource Include="Strings\fr\Resources.resw" />
+    <PRIResource Include="Strings\en\Resources.resw" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App.xaml.cs">
@@ -123,7 +131,6 @@
     <Content Include="Assets\Square310x310Logo.scale-200.png" />
     <Content Include="Assets\Square71x71Logo.scale-200.png" />
     <Content Include="Assets\StoreLogo.scale-200.png" />
-    <Content Include="Background\Mobile_Background.png" />
     <Content Include="Background\PC_Background.png" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
