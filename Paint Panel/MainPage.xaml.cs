@@ -454,11 +454,22 @@ namespace Paint_Panel
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            var file = e.Parameter as IRandomAccessStreamWithContentType;
-            if (file != null)
+            var indexFile = e.Parameter as StorageFile;
+            if (indexFile != null)
             {
-                await inkCanvas.InkPresenter.StrokeContainer.LoadAsync(file);
-                return;
+                if(indexFile.FileType.Equals(".ink"))
+                {
+                    var file = await indexFile.OpenReadAsync();
+                    await inkCanvas.InkPresenter.StrokeContainer.LoadAsync(file);
+                    return;
+                }
+                if(indexFile.FileType.Equals(".png") || indexFile.FileType.Equals(".jpg"))
+                {
+                    BitmapImage image = new BitmapImage();
+                    x = await indexFile.OpenAsync(FileAccessMode.Read);
+                    image.SetSource(x);
+                    back_image.Source = image;
+                }
             }
         }
 

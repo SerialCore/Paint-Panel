@@ -69,13 +69,12 @@ namespace Paint_Panel
             }
         }
 
-        protected override async void OnFileActivated(FileActivatedEventArgs args)
+        protected override void OnFileActivated(FileActivatedEventArgs args)
         {
             // 引用传入的文件
             StorageFile indexFile = args.Files[0] as StorageFile;
             if (indexFile != null)
             {
-                var file = await indexFile.OpenReadAsync();
                 launchEffect();
                 Frame rootframe = Window.Current.Content as Frame;
                 if (rootframe == null)
@@ -84,7 +83,7 @@ namespace Paint_Panel
                     Window.Current.Content = rootframe;
                 }
                 rootframe.BackStack.Clear();
-                rootframe.Navigate(typeof(MainPage), file);
+                rootframe.Navigate(typeof(MainPage), indexFile);
             }
             Window.Current.Activate();
         }
