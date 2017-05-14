@@ -1,1 +1,1 @@
-E:\UWP\Paint Panel\Paint Panel\bin\x64\Release\Upload\Paint Panel_2.8.88.0\Paint Panel_2.8.88.0_x86_x64.appxbundle
+C:\Users\zwx\Documents\Visual Studio 2017\Projects\Paint Panel\Paint Panel\bin\ARM\Release\Upload\Paint Panel_2.8.89.0\Paint Panel_2.8.89.0_x86_x64_arm.appxbundle
