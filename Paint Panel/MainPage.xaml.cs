@@ -1,4 +1,5 @@
 ﻿using Microsoft.Graphics.Canvas;
+using Microsoft.Toolkit.Uwp;
 using Paint_Panel.Control;
 using Paint_Panel.Pens;
 using System;
@@ -6,6 +7,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
@@ -13,6 +15,7 @@ using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Input.Inking;
 using Windows.UI.Notifications;
+using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -61,11 +64,12 @@ namespace Paint_Panel
             this.DataContext = this;
         }
 
-        // 公用的变量
+        // 全局变量
         private IRandomAccessStream x;   //图片加载和图片编辑用到的随机读取流
         private FilesOperator operate = new FilesOperator();  //文件操作的方法集合
         private Color currentColor = PanelColors.White;    //当前选定的背景颜色
         private ImageCollection currentImageItem = null;    //当前选定的背景集合项目
+        private PrintHelper printHelper;
 
         #region 用户操作
 
@@ -155,7 +159,7 @@ namespace Paint_Panel
             // 共享请求的信息
             DataRequest request = args.Request;
             request.Data.Properties.Title = "手绘";
-            request.Data.Properties.Description = "向朋友共享你的涂鸦";
+            request.Data.Properties.Description = "Share your painting";
 
             // 图片生成
             StorageFolder storageFolder = ApplicationData.Current.RoamingFolder;
@@ -392,6 +396,35 @@ namespace Paint_Panel
             collection_panel.IsPaneOpen = !collection_panel.IsPaneOpen;
         }
 
+        private async void print_image(object sender, RoutedEventArgs e)
+        {
+            StorageFolder folder = ApplicationData.Current.LocalFolder;
+            StorageFile printFile = await folder.CreateFileAsync("PrintFile.png", CreationCollisionOption.ReplaceExisting);
+            if (x != null)
+                await operate.returnImage(printFile, inkCanvas, back_image, currentColor, x);
+            else
+                await operate.returnImage(printFile, inkCanvas, currentColor);
+
+            var stream = await printFile.OpenReadAsync();
+            var bitmapImage = new BitmapImage();
+            bitmapImage.SetSource(stream);
+            printImage.Source = bitmapImage;
+
+            if (DirectPrintContainer.Children.Contains(PrintableContent))
+            {
+                DirectPrintContainer.Children.Remove(PrintableContent);
+            }
+            printHelper = new PrintHelper(Container);
+            printHelper.AddFrameworkElementToPrint(PrintableContent);
+
+            printHelper.OnPrintCanceled += PrintHelper_OnPrintCanceled;
+            printHelper.OnPrintFailed += PrintHelper_OnPrintFailed;
+            printHelper.OnPrintSucceeded += PrintHelper_OnPrintSucceeded;
+
+            await printHelper.ShowPrintUIAsync("Paint Panel Page");
+            await folder.DeleteAsync(StorageDeleteOption.PermanentDelete);
+        }
+
         #endregion
 
         #region 方法调用
@@ -493,6 +526,37 @@ namespace Paint_Panel
         {
             size_hight.Text = (inkCanvas.ActualHeight / 2.5).ToString();
             size_width.Text = (inkCanvas.ActualWidth / 2.5).ToString();
+        }
+
+        private async void PrintHelper_OnPrintSucceeded()
+        {
+            ReleasePrintHelper();
+            var dialog = new MessageDialog("Printing done.");
+            await dialog.ShowAsync();
+        }
+
+        private async void PrintHelper_OnPrintFailed()
+        {
+            ReleasePrintHelper();
+            var dialog = new MessageDialog("Printing failed.");
+            await dialog.ShowAsync();
+        }
+
+        private void PrintHelper_OnPrintCanceled()
+        {
+            ReleasePrintHelper();
+        }
+
+        private void ReleasePrintHelper()
+        {
+            printHelper.Dispose();
+
+            //While code could be used to re-add the printable content, it's not done here
+            //as it wasn't intended to be displayed.
+            /*if (!DirectPrintContainer.Children.Contains(PrintableContent))
+            {
+                DirectPrintContainer.Children.Add(PrintableContent);
+            }*/
         }
 
         #endregion

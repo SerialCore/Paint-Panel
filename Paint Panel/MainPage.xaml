@@ -93,6 +93,7 @@
                                     <MenuFlyoutItem x:Uid="InkwithoutBackground" Text="Ink without Background" Click="collection_nocolorInk"/>
                                 </MenuFlyoutSubItem>
                                 <MenuFlyoutItem x:Uid="SaveAsInk" Text="Save as Ink" Click="save_ink"/>
+                                <MenuFlyoutItem x:Uid="PrintImage" Text="Print Image" Click="print_image"/>
                             </MenuFlyout>
                         </FlyoutBase.AttachedFlyout>
                     </Button>
@@ -152,6 +153,13 @@
                             </ListView>
                         </Grid>
                     </ScrollViewer>
+
+                    <Grid x:Name="Container" Opacity="0" />
+                    <Grid x:Name="DirectPrintContainer">
+                        <StackPanel x:Name="PrintableContent" Margin="50,20" Orientation="Vertical">
+                            <Image x:Name="printImage" Visibility="Visible" Stretch="UniformToFill"/>
+                        </StackPanel>
+                    </Grid>
                 </Grid>
             </Border>
 
