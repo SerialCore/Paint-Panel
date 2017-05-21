@@ -162,8 +162,7 @@ namespace Paint_Panel
             request.Data.Properties.Description = "Share your painting";
 
             // 图片生成
-            StorageFolder storageFolder = ApplicationData.Current.RoamingFolder;
-            StorageFile file = await storageFolder.CreateFileAsync("paint.png", CreationCollisionOption.ReplaceExisting);
+            StorageFile file = await folder.CreateFileAsync("paint.png", CreationCollisionOption.ReplaceExisting);
             if (x == null)
             {
                 operate.generateImage(file, inkCanvas, currentColor);
@@ -398,7 +397,6 @@ namespace Paint_Panel
 
         private async void print_image(object sender, RoutedEventArgs e)
         {
-            StorageFolder folder = ApplicationData.Current.LocalFolder;
             StorageFile printFile = await folder.CreateFileAsync("PrintFile.png", CreationCollisionOption.ReplaceExisting);
             if (x != null)
                 await operate.returnImage(printFile, inkCanvas, back_image, currentColor, x);
@@ -422,7 +420,6 @@ namespace Paint_Panel
             printHelper.OnPrintSucceeded += PrintHelper_OnPrintSucceeded;
 
             await printHelper.ShowPrintUIAsync("Paint Panel Page");
-            await folder.DeleteAsync(StorageDeleteOption.PermanentDelete);
         }
 
         #endregion
@@ -531,15 +528,13 @@ namespace Paint_Panel
         private async void PrintHelper_OnPrintSucceeded()
         {
             ReleasePrintHelper();
-            var dialog = new MessageDialog("Printing done.");
-            await dialog.ShowAsync();
+            await new MessageDialog("Printing done.").ShowAsync();
         }
 
         private async void PrintHelper_OnPrintFailed()
         {
             ReleasePrintHelper();
-            var dialog = new MessageDialog("Printing failed.");
-            await dialog.ShowAsync();
+            await new MessageDialog("Printing failed.").ShowAsync();
         }
 
         private void PrintHelper_OnPrintCanceled()
@@ -553,10 +548,10 @@ namespace Paint_Panel
 
             //While code could be used to re-add the printable content, it's not done here
             //as it wasn't intended to be displayed.
-            /*if (!DirectPrintContainer.Children.Contains(PrintableContent))
-            {
-                DirectPrintContainer.Children.Add(PrintableContent);
-            }*/
+            //if (!DirectPrintContainer.Children.Contains(PrintableContent))
+            //{
+            //    DirectPrintContainer.Children.Add(PrintableContent);
+            //}
         }
 
         #endregion

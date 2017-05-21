@@ -154,11 +154,13 @@
                         </Grid>
                     </ScrollViewer>
 
-                    <Grid x:Name="Container" Opacity="0" />
-                    <Grid x:Name="DirectPrintContainer">
-                        <StackPanel x:Name="PrintableContent" Margin="50,20" Orientation="Vertical">
-                            <Image x:Name="printImage" Visibility="Visible" Stretch="UniformToFill"/>
-                        </StackPanel>
+                    <Grid>
+                        <Grid x:Name="Container" Opacity="0" />
+                        <Grid x:Name="DirectPrintContainer">
+                            <StackPanel x:Name="PrintableContent" Margin="50,20" Orientation="Vertical">
+                                <Image x:Name="printImage" Visibility="Visible" Stretch="UniformToFill"/>
+                            </StackPanel>
+                        </Grid>
                     </Grid>
                 </Grid>
             </Border>
