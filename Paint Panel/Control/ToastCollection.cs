@@ -31,27 +31,5 @@ namespace Paint_Panel.Control
             }
         };
 
-        public static ToastContent SaveSuccessfull = new ToastContent()
-        {
-            Launch = "app-defined-string",
-            Visual = new ToastVisual()
-            {
-                BindingGeneric = new ToastBindingGeneric()
-                {
-                    Children =
-                    {
-                        new AdaptiveText()
-                        {
-                            Text = "File saved successfull!"
-                        }
-                    },
-                    AppLogoOverride = new ToastGenericAppLogo()
-                    {
-                        Source = "Assets/StoreLogo.scale-200.png"
-                    }
-                }
-            }
-        };
-
     }
 }

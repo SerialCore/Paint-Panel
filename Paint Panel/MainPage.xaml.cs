@@ -108,9 +108,7 @@ namespace Paint_Panel
             var file = await picker.PickSaveFileAsync();
             if (file != null)
             {
-                operate.generateImage(file, inkCanvas, back_image, currentColor, x);
-                ToastNotification notification = new ToastNotification(Control.ToastCollection.SaveSuccessfull.GetXml());
-                ToastNotificationManager.CreateToastNotifier().Show(notification);
+                await operate.generateImage(file, inkCanvas, back_image, currentColor, x);
             }
         }
 
@@ -123,9 +121,7 @@ namespace Paint_Panel
             var file = await picker.PickSaveFileAsync();
             if (file != null)
             {
-                operate.generateImage(file, inkCanvas, currentColor);
-                ToastNotification notification = new ToastNotification(Control.ToastCollection.SaveSuccessfull.GetXml());
-                ToastNotificationManager.CreateToastNotifier().Show(notification);
+                await operate.generateImage(file, inkCanvas, currentColor);
             }
         }
 
@@ -138,9 +134,7 @@ namespace Paint_Panel
             var file = await picker.PickSaveFileAsync();
             if (file != null)
             {
-                operate.generateImage(file, inkCanvas);
-                ToastNotification notification = new ToastNotification(Control.ToastCollection.SaveSuccessfull.GetXml());
-                ToastNotificationManager.CreateToastNotifier().Show(notification);
+                await operate.generateImage(file, inkCanvas);
             }
         }
 
@@ -162,14 +156,14 @@ namespace Paint_Panel
             request.Data.Properties.Description = "Share your painting";
 
             // 图片生成
-            StorageFile file = await folder.CreateFileAsync("paint.png", CreationCollisionOption.ReplaceExisting);
+            StorageFile file = await folder.CreateFileAsync(DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", CreationCollisionOption.ReplaceExisting);
             if (x == null)
             {
-                operate.generateImage(file, inkCanvas, currentColor);
+                await operate.generateImage(file, inkCanvas, currentColor);
             }
             else
             {
-                operate.generateImage(file, inkCanvas, back_image, currentColor, x);
+                await operate.generateImage(file, inkCanvas, back_image, currentColor, x);
             }
 
             // 将图片打包
@@ -233,9 +227,6 @@ namespace Paint_Panel
                 var bt = await ConvertImagetoByte(stream);
                 await FileIO.WriteBytesAsync(file, bt);
                 await CachedFileManager.CompleteUpdatesAsync(file);
-
-                ToastNotification notification = new ToastNotification(Control.ToastCollection.SaveSuccessfull.GetXml());
-                ToastNotificationManager.CreateToastNotifier().Show(notification);
             }
         }
 
@@ -305,7 +296,7 @@ namespace Paint_Panel
                     foreach (StorageFile item in image_file)
                     {
                         var file = await item.CopyAsync(folder);
-                        await file.RenameAsync(DateTime.Now.GetHashCode().ToString() + ".png");
+                        await file.RenameAsync(DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
                         stream = await file.OpenAsync(FileAccessMode.Read);
 
                         imageCollection.Add(new ImageCollection { FileName = file.Name, ImageStream = stream, ImageFile = getBitmapImage(stream) });
@@ -347,46 +338,37 @@ namespace Paint_Panel
                 ToastNotificationManager.CreateToastNotifier().Show(notification);
                 return;
             }
-            StorageFile file = await folder.CreateFileAsync(DateTime.Now.GetHashCode().ToString() + ".png");
+            StorageFile file = await folder.CreateFileAsync(DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
             if (file != null)
             {
-                file = await operate.returnImage(file, inkCanvas, back_image, currentColor, x);
+                await operate.generateImage(file, inkCanvas, back_image, currentColor, x);
                 IRandomAccessStream stream = new InMemoryRandomAccessStream();
                 stream = await file.OpenAsync(FileAccessMode.Read);
                 imageCollection.Add(new ImageCollection { FileName = file.Name, ImageStream = stream, ImageFile = getBitmapImage(stream) });
-
-                ToastNotification notification = new ToastNotification(Control.ToastCollection.SaveSuccessfull.GetXml());
-                ToastNotificationManager.CreateToastNotifier().Show(notification);
             }
         }
 
         private async void collection_colorInk(object sender, RoutedEventArgs e)
         {
-            StorageFile file = await folder.CreateFileAsync(DateTime.Now.GetHashCode().ToString() + ".png");
+            StorageFile file = await folder.CreateFileAsync(DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
             if (file != null)
             {
-                file = await operate.returnImage(file, inkCanvas, currentColor);
+                await operate.generateImage(file, inkCanvas, currentColor);
                 IRandomAccessStream stream = new InMemoryRandomAccessStream();
                 stream = await file.OpenAsync(FileAccessMode.Read);
                 imageCollection.Add(new ImageCollection { FileName = file.Name, ImageStream = stream, ImageFile = getBitmapImage(stream) });
-
-                ToastNotification notification = new ToastNotification(Control.ToastCollection.SaveSuccessfull.GetXml());
-                ToastNotificationManager.CreateToastNotifier().Show(notification);
             }
         }
 
         private async void collection_nocolorInk(object sender, RoutedEventArgs e)
         {
-            StorageFile file = await folder.CreateFileAsync(DateTime.Now.GetHashCode().ToString() + ".png");
+            StorageFile file = await folder.CreateFileAsync(DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
             if (file != null)
             {
-                file = await operate.returnImage(file, inkCanvas);
+                await operate.generateImage(file, inkCanvas);
                 IRandomAccessStream stream = new InMemoryRandomAccessStream();
                 stream = await file.OpenAsync(FileAccessMode.Read);
                 imageCollection.Add(new ImageCollection { FileName = file.Name, ImageStream = stream, ImageFile = getBitmapImage(stream) });
-
-                ToastNotification notification = new ToastNotification(Control.ToastCollection.SaveSuccessfull.GetXml());
-                ToastNotificationManager.CreateToastNotifier().Show(notification);
             }
         }
 
@@ -397,11 +379,18 @@ namespace Paint_Panel
 
         private async void print_image(object sender, RoutedEventArgs e)
         {
-            StorageFile printFile = await folder.CreateFileAsync("PrintFile.png", CreationCollisionOption.ReplaceExisting);
+            StorageFile printFile = await folder.CreateFileAsync(DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", CreationCollisionOption.ReplaceExisting);
             if (x != null)
-                await operate.returnImage(printFile, inkCanvas, back_image, currentColor, x);
+                await operate.generateImage(printFile, inkCanvas, back_image, currentColor, x);
             else
-                await operate.returnImage(printFile, inkCanvas, currentColor);
+                await operate.generateImage(printFile, inkCanvas, currentColor);
+
+            if (printFile != null)
+            {
+                IRandomAccessStream imageStream = new InMemoryRandomAccessStream();
+                imageStream = await printFile.OpenAsync(FileAccessMode.Read);
+                imageCollection.Add(new ImageCollection { FileName = printFile.Name, ImageStream = imageStream, ImageFile = getBitmapImage(imageStream) });
+            }
 
             var stream = await printFile.OpenReadAsync();
             var bitmapImage = new BitmapImage();
