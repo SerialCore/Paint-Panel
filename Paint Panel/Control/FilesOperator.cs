@@ -18,7 +18,7 @@ namespace Paint_Panel.Control
         public async Task generateImage(StorageFile file, InkCanvas inkCanvas)
         {
             CanvasDevice device = CanvasDevice.GetSharedDevice();
-            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)inkCanvas.ActualWidth, (int)inkCanvas.ActualHeight, 300);
+            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)inkCanvas.ActualWidth, (int)inkCanvas.ActualHeight, 160);
 
             using (var ds = renderTarget.CreateDrawingSession())
             {
@@ -34,7 +34,7 @@ namespace Paint_Panel.Control
         public async Task generateImage(StorageFile file, InkCanvas inkCanvas, Color color)
         {
             CanvasDevice device = CanvasDevice.GetSharedDevice();
-            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)inkCanvas.ActualWidth, (int)inkCanvas.ActualHeight, 300);
+            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)inkCanvas.ActualWidth, (int)inkCanvas.ActualHeight, 160);
 
             using (var ds = renderTarget.CreateDrawingSession())
             {
@@ -53,7 +53,7 @@ namespace Paint_Panel.Control
         {
             CanvasDevice device = CanvasDevice.GetSharedDevice();
             //CanvasBitmap image = await CanvasBitmap.LoadAsync(device, x);
-            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)inkCanvas.ActualWidth, (int)inkCanvas.ActualHeight, 300);
+            CanvasRenderTarget renderTarget = new CanvasRenderTarget(device, (int)inkCanvas.ActualWidth, (int)inkCanvas.ActualHeight, 160);
 
             using (var ds = renderTarget.CreateDrawingSession())
             {
