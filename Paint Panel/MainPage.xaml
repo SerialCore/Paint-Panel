@@ -66,7 +66,10 @@
             <Border Grid.Row="0" Grid.Column="1" Background="#FF2D2D30">
                 <StackPanel Orientation="Horizontal" RequestedTheme="Dark">
                     <Button Click="ink_undo" Background="#FF2D2D30" Height="48" Width="48">
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE845;" />
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE10E;" />
+                    </Button>
+                    <Button Click="ink_redo"  Background="#FF2D2D30" Height="48" Width="48">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE10D;" />
                     </Button>
                     <Button Tapped="flyoutBase_Tapped" Background="#FF2D2D30" Height="48" Width="48">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE197;" />
@@ -79,7 +82,7 @@
                         </FlyoutBase.AttachedFlyout>
                     </Button>
                     <Button Tapped="flyoutBase_Tapped" Background="#FF2D2D30" Height="48" Width="48">
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE105;" />
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72D;" />
                         <FlyoutBase.AttachedFlyout>
                             <MenuFlyout >
                                 <MenuFlyoutSubItem x:Uid="SaveAsImage" Text="Save as Image">
@@ -94,11 +97,9 @@
                                 </MenuFlyoutSubItem>
                                 <MenuFlyoutItem x:Uid="SaveAsInk" Text="Save as Ink" Click="save_ink"/>
                                 <MenuFlyoutItem x:Uid="PrintImage" Text="Print Image" Click="print_image"/>
+                                <MenuFlyoutItem x:Uid="ShareImage" Text="Share Image" Click="share_img"/>
                             </MenuFlyout>
                         </FlyoutBase.AttachedFlyout>
-                    </Button>
-                    <Button Click="share_img" Background="#FF2D2D30" Height="48" Width="48">
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72D;" />
                     </Button>
                 </StackPanel>
             </Border>

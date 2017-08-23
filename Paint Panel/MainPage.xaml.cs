@@ -37,6 +37,8 @@ namespace Paint_Panel
 
         public ObservableCollection<ImageCollection> imageCollection { get; set; }
 
+        public Stack<InkStroke> UndoStrokes { get; set; }
+
         StorageFolder folder = ApplicationData.Current.LocalFolder;
 
         public MainPage()
@@ -62,6 +64,8 @@ namespace Paint_Panel
             imageCollection = new ObservableCollection<ImageCollection>();
             refreshList();
             this.DataContext = this;
+            // 墨迹堆栈
+            UndoStrokes = new Stack<InkStroke>();
         }
 
         // 全局变量
@@ -233,11 +237,29 @@ namespace Paint_Panel
         private void ink_undo(object sender, RoutedEventArgs e)
         {
             IReadOnlyList<InkStroke> strokes = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
-
             if (strokes.Count > 0)
             {
                 strokes[strokes.Count - 1].Selected = true;
+                UndoStrokes.Push(strokes[strokes.Count - 1]); // 入栈
                 inkCanvas.InkPresenter.StrokeContainer.DeleteSelected();
+            }
+        }
+
+        private void ink_redo(object sender, RoutedEventArgs e)
+        {
+            if (UndoStrokes.Count > 0)
+            {
+                var stroke = UndoStrokes.Pop();
+
+                // This will blow up sky high:
+                // InkCanvas.InkPresenter.StrokeContainer.AddStroke(stroke);
+
+                var strokeBuilder = new InkStrokeBuilder();
+                strokeBuilder.SetDefaultDrawingAttributes(stroke.DrawingAttributes);
+                System.Numerics.Matrix3x2 matr = stroke.PointTransform;
+                IReadOnlyList<InkPoint> inkPoints = stroke.GetInkPoints();
+                InkStroke stk = strokeBuilder.CreateStrokeFromInkPoints(inkPoints, matr);
+                inkCanvas.InkPresenter.StrokeContainer.AddStroke(stk);
             }
         }
 
