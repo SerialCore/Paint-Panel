@@ -1,1 +1,1 @@
-C:\Users\zwx\Documents\Visual Studio 2017\Projects\Paint Panel\Paint Panel\bin\ARM\Release\Upload\Paint Panel_2.11.96.0\Paint Panel_2.11.96.0_x86_x64_arm.appxbundle
+C:\Users\zwx\Documents\Visual Studio 2017\Projects\Paint Panel\Paint Panel\bin\ARM\Release\Upload\Paint Panel_2.12.97.0\Paint Panel_2.12.97.0_x86_x64_arm.appxbundle

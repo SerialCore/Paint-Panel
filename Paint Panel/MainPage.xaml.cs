@@ -93,6 +93,7 @@ namespace Paint_Panel
 
         private void pens_colors_Click(object sender, RoutedEventArgs e)
         {
+            SetBoard.Visibility = Visibility.Visible;
             color_list.Visibility = Visibility.Collapsed;
             pens_list.Visibility = Visibility.Visible;
         }
@@ -234,6 +235,14 @@ namespace Paint_Panel
             }
         }
 
+        private void open_setboard(object sender, RoutedEventArgs e)
+        {
+            if (SetBoard.Visibility == Visibility.Visible)
+                SetBoard.Visibility = Visibility.Collapsed;
+            else
+                SetBoard.Visibility = Visibility.Visible;
+        }
+
         private void ink_undo(object sender, RoutedEventArgs e)
         {
             IReadOnlyList<InkStroke> strokes = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
@@ -276,6 +285,7 @@ namespace Paint_Panel
             customPen.CustomPen = item.Pen;
             color_list.Visibility = Visibility.Visible;
             pens_list.Visibility = Visibility.Collapsed;
+            SetBoard.Visibility = Visibility.Collapsed;
         }
 
         private async void new_size(object sender, RoutedEventArgs e)
