@@ -127,22 +127,38 @@
                     <TextBox x:Name="size_width" Width="100" Grid.Row="1" Grid.Column="1" InputScope="Number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                     <Button x:Uid="SizeSet" Grid.Column="2" Grid.RowSpan="2" Content="Set" Click="new_size" HorizontalAlignment="Center" VerticalAlignment="Stretch" Height="48" Width="55" Foreground="White" Background="#FF5156DC"/>
                 </Grid>
-                <ScrollViewer x:Name="color_list" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
-                    <ListView ItemsSource="{Binding myColors}" IsItemClickEnabled="True" ItemClick="color_list_ItemClick" SelectionMode="Single">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <Grid Height="48">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="24"/>
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
-                                    <Rectangle Grid.Column="0" Fill="{Binding IndexColorBrush}" Height="20" Width="20"/>
-                                    <TextBlock Grid.Column="1" Text="{Binding ColorName}" Margin="24,0,0,0" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </ScrollViewer>
+                <Pivot Grid.Row="1" x:Name="color_pane">
+                    <PivotItem Header="Picker">
+                        <StackPanel >
+                            <ToggleSwitch x:Name="color_toggle" OnContent="Color set for Background" OffContent="Color set for Pen"/>
+                            <ColorPicker x:Name="colorPicker" 
+                                 IsColorSliderVisible="True"
+                                 IsColorChannelTextInputVisible="True"
+                                 IsHexInputVisible="True"
+                                 IsAlphaEnabled="False"
+                                 IsAlphaSliderVisible="True"
+                                 IsAlphaTextInputVisible="True" 
+                                 ColorChanged="colorPicker_ColorChanged"
+                                 Margin="4"/>
+                        </StackPanel>
+                    </PivotItem>
+                    <PivotItem Header="Pane">
+                        <ListView ItemsSource="{Binding myColors}" IsItemClickEnabled="True" ItemClick="color_list_ItemClick" SelectionMode="Single">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Height="48">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="24"/>
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <Rectangle Grid.Column="0" Fill="{Binding IndexColorBrush}" Height="20" Width="20"/>
+                                        <TextBlock Grid.Column="1" Text="{Binding ColorName}" Margin="24,0,0,0" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </PivotItem>
+                </Pivot>
                 <ScrollViewer x:Name="pens_list" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                                   Visibility="Collapsed">
                     <Grid >

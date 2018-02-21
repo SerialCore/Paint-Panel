@@ -19,6 +19,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 
@@ -94,7 +95,7 @@ namespace Paint_Panel
         private void pens_colors_Click(object sender, RoutedEventArgs e)
         {
             SetBoard.Visibility = Visibility.Visible;
-            color_list.Visibility = Visibility.Collapsed;
+            color_pane.Visibility = Visibility.Collapsed;
             pens_list.Visibility = Visibility.Visible;
         }
 
@@ -283,7 +284,7 @@ namespace Paint_Panel
         {
             var item = e.ClickedItem as PensCollection;
             customPen.CustomPen = item.Pen;
-            color_list.Visibility = Visibility.Visible;
+            color_pane.Visibility = Visibility.Visible;
             pens_list.Visibility = Visibility.Collapsed;
             SetBoard.Visibility = Visibility.Collapsed;
         }
@@ -544,6 +545,22 @@ namespace Paint_Panel
         {
             size_hight.Text = (inkCanvas.ActualHeight / 2.5).ToString();
             size_width.Text = (inkCanvas.ActualWidth / 2.5).ToString();
+        }
+
+        private void colorPicker_ColorChanged(ColorPicker sender, ColorChangedEventArgs args)
+        {
+            if (color_toggle.IsOn)
+            {
+                panel_color.Fill = new SolidColorBrush(args.NewColor);
+                currentColor = args.NewColor;
+            }
+            else
+            {
+                InkDrawingAttributes drawingAttributes = inkCanvas.InkPresenter.CopyDefaultDrawingAttributes();
+                drawingAttributes.Color = args.NewColor;
+                inkCanvas.InkPresenter.UpdateDefaultDrawingAttributes(drawingAttributes);
+                inkToolbar.InkDrawingAttributes.Color = args.NewColor;
+            }
         }
 
         private async void PrintHelper_OnPrintSucceeded()
