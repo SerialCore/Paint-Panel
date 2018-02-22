@@ -69,25 +69,6 @@ namespace Paint_Panel
             }
         }
 
-        protected override void OnFileActivated(FileActivatedEventArgs args)
-        {
-            // 引用传入的文件
-            StorageFile indexFile = args.Files[0] as StorageFile;
-            if (indexFile != null)
-            {
-                launchEffect();
-                Frame rootframe = Window.Current.Content as Frame;
-                if (rootframe == null)
-                {
-                    rootframe = new Frame();
-                    Window.Current.Content = rootframe;
-                }
-                rootframe.BackStack.Clear();
-                rootframe.Navigate(typeof(MainPage), indexFile);
-            }
-            Window.Current.Activate();
-        }
-
         private void launchEffect()
         {
             // 全屏
@@ -115,6 +96,45 @@ namespace Paint_Panel
 
             view.TitleBar.ButtonInactiveBackgroundColor = Color.FromArgb(255, 45, 45, 48);
             view.TitleBar.ButtonInactiveForegroundColor = Colors.White;
+        }
+
+        protected override void OnActivated(IActivatedEventArgs args)
+        {
+            if (args.Kind == ActivationKind.Protocol)
+            {
+                launchEffect();
+                Frame rootFrame = Window.Current.Content as Frame;
+                if (rootFrame == null)
+                {
+                    rootFrame = new Frame();
+                    rootFrame.NavigationFailed += OnNavigationFailed;
+                    Window.Current.Content = rootFrame;
+                }
+                if (rootFrame.Content == null)
+                {
+                    rootFrame.Navigate(typeof(MainPage));
+                }
+                Window.Current.Activate();
+            }
+        }
+
+        protected override void OnFileActivated(FileActivatedEventArgs args)
+        {
+            // 引用传入的文件
+            StorageFile indexFile = args.Files[0] as StorageFile;
+            if (indexFile != null)
+            {
+                launchEffect();
+                Frame rootframe = Window.Current.Content as Frame;
+                if (rootframe == null)
+                {
+                    rootframe = new Frame();
+                    Window.Current.Content = rootframe;
+                }
+                rootframe.BackStack.Clear();
+                rootframe.Navigate(typeof(MainPage), indexFile);
+            }
+            Window.Current.Activate();
         }
 
         /// <summary>
