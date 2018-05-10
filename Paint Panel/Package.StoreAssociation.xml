@@ -2,6 +2,7 @@
 <StoreAssociation xmlns="http://schemas.microsoft.com/appx/2010/storeassociation">
   <Publisher>CN=73D1BF38-7322-4954-A5E9-541DD3BC2D66</Publisher>
   <PublisherDisplayName>张文轩</PublisherDisplayName>
+  <DeveloperAccountType>MSA</DeveloperAccountType>
   <GeneratePackageHash>http://www.w3.org/2001/04/xmlenc#sha256</GeneratePackageHash>
   <SupportedLocales>
     <Language Code="af" InMinimumRequirementSet="true" />
@@ -366,15 +367,20 @@
   <AccountPackageIdentityNames>
     <MainPackageIdentityName>16496zhwx.CFrontCompiler</MainPackageIdentityName>
     <MainPackageIdentityName>16496zhwx.26930D67DAD7</MainPackageIdentityName>
+    <MainPackageIdentityName>16496zhwx.TheoPhysRSS</MainPackageIdentityName>
+    <MainPackageIdentityName>16496zhwx.LostinMatrix</MainPackageIdentityName>
     <MainPackageIdentityName>16496zhwx.MirrorScreen</MainPackageIdentityName>
     <MainPackageIdentityName>16496zhwx.53747B26B9B66</MainPackageIdentityName>
     <MainPackageIdentityName>16496zhwx.PaintPanelLite</MainPackageIdentityName>
     <MainPackageIdentityName>16496zhwx.PrivateAlbums</MainPackageIdentityName>
-    <MainPackageIdentityName>16496zhwx.TheoPhysRSS</MainPackageIdentityName>
+    <MainPackageIdentityName>16496zhwx.ResearchFlow</MainPackageIdentityName>
+    <MainPackageIdentityName>16496zhwx.TaskFlowforResearch</MainPackageIdentityName>
     <MainPackageIdentityName>16496zhwx.MicrosoftDevelopRSS</MainPackageIdentityName>
-    <MainPackageIdentityName>16496zhwx.35404E73783C3</MainPackageIdentityName>
     <MainPackageIdentityName>16496zhwx.30940A4610B6C</MainPackageIdentityName>
+    <MainPackageIdentityName>16496zhwx.35404E73783C3</MainPackageIdentityName>
+    <MainPackageIdentityName>16496zhwx.42101F2B8F267</MainPackageIdentityName>
     <MainPackageIdentityName>16496zhwx.6164141C316F3</MainPackageIdentityName>
+    <MainPackageIdentityName>16496zhwx.3061351BAC423</MainPackageIdentityName>
   </AccountPackageIdentityNames>
   <PackageInfoList LandingUrl="https://developer.microsoft.com/dashboard/Application?appId=9NBLGGH43XP9" />
 </StoreAssociation>
