@@ -71,14 +71,13 @@ namespace Paint_Panel
 
         private void launchEffect()
         {
-            // 全屏
-            Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
 
             var view = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView();
             
             // active
             view.TitleBar.BackgroundColor = Color.FromArgb(255,45,45,48);
             view.TitleBar.ForegroundColor = Colors.White;
+
 
             // inactive
             view.TitleBar.InactiveBackgroundColor = Color.FromArgb(255, 45, 45, 48);
