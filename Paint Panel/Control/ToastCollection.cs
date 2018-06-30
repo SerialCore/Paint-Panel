@@ -20,7 +20,7 @@ namespace Paint_Panel.Control
                         },
                         new AdaptiveText()
                         {
-                            Text = "Please open a image or choose \"Ink with Background\""
+                            Text = "Please open a image or choose \"Ink without Background\""
                         }
                     },
                     AppLogoOverride = new ToastGenericAppLogo()

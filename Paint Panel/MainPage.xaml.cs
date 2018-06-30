@@ -13,6 +13,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI;
+using Windows.UI.Composition;
 using Windows.UI.Core;
 using Windows.UI.Input.Inking;
 using Windows.UI.Notifications;
@@ -20,6 +21,7 @@ using Windows.UI.Popups;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
@@ -95,19 +97,13 @@ namespace Paint_Panel
 
         private void pens_colors_Click(object sender, RoutedEventArgs e)
         {
-            SetBoard.Visibility = Visibility.Visible;
+            set_panel.IsPaneOpen = true;
             color_pane.Visibility = Visibility.Collapsed;
             pens_list.Visibility = Visibility.Visible;
         }
 
         private async void save_composite(object sender, RoutedEventArgs e)
         {
-            if (x == null)
-            {
-                ToastNotification notification = new ToastNotification(Control.ToastCollection.NoneInsertedImage.GetXml());
-                ToastNotificationManager.CreateToastNotifier().Show(notification);
-                return;
-            }
             FileSavePicker picker = new FileSavePicker();
             picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
             picker.SuggestedFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".png";
@@ -115,20 +111,7 @@ namespace Paint_Panel
             var file = await picker.PickSaveFileAsync();
             if (file != null)
             {
-                await operate.generateImage(file, inkCanvas, back_image, currentColor, x);
-            }
-        }
-
-        private async void save_colorInk(object sender, RoutedEventArgs e)
-        {
-            FileSavePicker picker = new FileSavePicker();
-            picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-            picker.SuggestedFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".png";
-            picker.FileTypeChoices.Add("Image files", new string[] { ".png" });
-            var file = await picker.PickSaveFileAsync();
-            if (file != null)
-            {
-                await operate.generateImage(file, inkCanvas, currentColor);
+                await operate.generateImage(file, inkCanvas, currentColor, back_image, x);
             }
         }
 
@@ -170,7 +153,7 @@ namespace Paint_Panel
             }
             else
             {
-                await operate.generateImage(file, inkCanvas, back_image, currentColor, x);
+                await operate.generateImage(file, inkCanvas, currentColor, back_image, x);
             }
 
             // 将图片打包
@@ -237,14 +220,6 @@ namespace Paint_Panel
             }
         }
 
-        private void open_setboard(object sender, RoutedEventArgs e)
-        {
-            if (SetBoard.Visibility == Visibility.Visible)
-                SetBoard.Visibility = Visibility.Collapsed;
-            else
-                SetBoard.Visibility = Visibility.Visible;
-        }
-
         private void ink_undo(object sender, RoutedEventArgs e)
         {
             IReadOnlyList<InkStroke> strokes = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
@@ -287,7 +262,7 @@ namespace Paint_Panel
             customPen.CustomPen = item.Pen;
             color_pane.Visibility = Visibility.Visible;
             pens_list.Visibility = Visibility.Collapsed;
-            SetBoard.Visibility = Visibility.Collapsed;
+            set_panel.IsPaneOpen = false;
         }
 
         private async void new_size(object sender, RoutedEventArgs e)
@@ -316,106 +291,21 @@ namespace Paint_Panel
             back_image.Source = bi3;
         }
 
-        private async void collection_addnew(object sender, RoutedEventArgs e)
-        {
-            FileOpenPicker picker = new FileOpenPicker();
-            picker.FileTypeFilter.Add(".png");
-            picker.FileTypeFilter.Add(".jpg");
-            IReadOnlyList<StorageFile> image_file = await picker.PickMultipleFilesAsync();
-            if (image_file != null)
-            {
-                await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-                {
-                    IRandomAccessStream stream = new InMemoryRandomAccessStream();
-                    foreach (StorageFile item in image_file)
-                    {
-                        var file = await item.CopyAsync(folder);
-                        await file.RenameAsync(DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
-                        stream = await file.OpenAsync(FileAccessMode.Read);
-
-                        imageCollection.Add(new ImageCollection { FileName = file.Name, ImageStream = stream, ImageFile = getBitmapImage(stream) });
-                        stream.Dispose();
-                    }
-                });
-            }
-        }
-
-        private void collection_choose(object sender, RoutedEventArgs e)
-        {
-            if (currentImageItem != null)
-            {
-                x = currentImageItem.ImageStream;
-                back_image.Source = currentImageItem.ImageFile;
-            }
-        }
-
-        private async void collection_delete(object sender, RoutedEventArgs e)
-        {
-            if (currentImageItem != null && imageCollection.IndexOf(currentImageItem) >= 0)
-            {
-                var file_delete = await folder.GetFileAsync(currentImageItem.FileName);
-                await file_delete.DeleteAsync();
-                imageCollection.Remove(currentImageItem);
-            }
-        }
-
         private void image_ItemClick(object sender, ItemClickEventArgs e)
         {
             currentImageItem = e.ClickedItem as ImageCollection;
         }
 
-        private async void collection_composite(object sender, RoutedEventArgs e)
-        {
-            if (x == null)
-            {
-                ToastNotification notification = new ToastNotification(Control.ToastCollection.NoneInsertedImage.GetXml());
-                ToastNotificationManager.CreateToastNotifier().Show(notification);
-                return;
-            }
-            StorageFile file = await folder.CreateFileAsync(DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
-            if (file != null)
-            {
-                await operate.generateImage(file, inkCanvas, back_image, currentColor, x);
-                IRandomAccessStream stream = new InMemoryRandomAccessStream();
-                stream = await file.OpenAsync(FileAccessMode.Read);
-                imageCollection.Add(new ImageCollection { FileName = file.Name, ImageStream = stream, ImageFile = getBitmapImage(stream) });
-            }
-        }
-
-        private async void collection_colorInk(object sender, RoutedEventArgs e)
-        {
-            StorageFile file = await folder.CreateFileAsync(DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
-            if (file != null)
-            {
-                await operate.generateImage(file, inkCanvas, currentColor);
-                IRandomAccessStream stream = new InMemoryRandomAccessStream();
-                stream = await file.OpenAsync(FileAccessMode.Read);
-                imageCollection.Add(new ImageCollection { FileName = file.Name, ImageStream = stream, ImageFile = getBitmapImage(stream) });
-            }
-        }
-
-        private async void collection_nocolorInk(object sender, RoutedEventArgs e)
-        {
-            StorageFile file = await folder.CreateFileAsync(DateTime.Now.ToString("yyyyMMddHHmmss") + ".png");
-            if (file != null)
-            {
-                await operate.generateImage(file, inkCanvas);
-                IRandomAccessStream stream = new InMemoryRandomAccessStream();
-                stream = await file.OpenAsync(FileAccessMode.Read);
-                imageCollection.Add(new ImageCollection { FileName = file.Name, ImageStream = stream, ImageFile = getBitmapImage(stream) });
-            }
-        }
-
         private void open_functions(object sender, RoutedEventArgs e)
         {
-            collection_panel.IsPaneOpen = !collection_panel.IsPaneOpen;
+            set_panel.IsPaneOpen = !set_panel.IsPaneOpen;
         }
 
         private async void print_image(object sender, RoutedEventArgs e)
         {
             StorageFile printFile = await folder.CreateFileAsync(DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", CreationCollisionOption.ReplaceExisting);
             if (x != null)
-                await operate.generateImage(printFile, inkCanvas, back_image, currentColor, x);
+                await operate.generateImage(printFile, inkCanvas, currentColor, back_image, x);
             else
                 await operate.generateImage(printFile, inkCanvas, currentColor);
 
@@ -448,6 +338,19 @@ namespace Paint_Panel
         #endregion
 
         #region 方法调用
+
+        private void InitializeFrostedGlass(UIElement glassHost)
+        {
+            Visual hostVisual = ElementCompositionPreview.GetElementVisual(glassHost);
+            Compositor compositor = hostVisual.Compositor;
+            var backdropBrush = compositor.CreateHostBackdropBrush();
+            var glassVisual = compositor.CreateSpriteVisual();
+            glassVisual.Brush = backdropBrush;
+            ElementCompositionPreview.SetElementChildVisual(glassHost, glassVisual);
+            var bindSizeAnimation = compositor.CreateExpressionAnimation("hostVisual.Size");
+            bindSizeAnimation.SetReferenceParameter("hostVisual", hostVisual);
+            glassVisual.StartAnimation("Size", bindSizeAnimation);
+        }
 
         private void clear_img(object sender, RoutedEventArgs e)
         {
@@ -507,17 +410,23 @@ namespace Paint_Panel
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
+            InitializeFrostedGlass(GlassHost);
+
             var indexFile = e.Parameter as StorageFile;
             if (indexFile != null)
             {
                 if(indexFile.FileType.Equals(".ink"))
                 {
+                    Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().Title = indexFile.Name;
+
                     var file = await indexFile.OpenReadAsync();
                     await inkCanvas.InkPresenter.StrokeContainer.LoadAsync(file);
                     return;
                 }
                 if(indexFile.FileType.Equals(".png") || indexFile.FileType.Equals(".jpg"))
                 {
+                    Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().Title = indexFile.Name;
+
                     BitmapImage image = new BitmapImage();
                     x = await indexFile.OpenAsync(FileAccessMode.Read);
                     image.SetSource(x);

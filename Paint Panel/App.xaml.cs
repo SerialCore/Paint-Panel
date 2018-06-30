@@ -1,6 +1,7 @@
 ﻿using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
+using Windows.ApplicationModel.Core;
 using Windows.Foundation.Metadata;
 using Windows.Storage;
 using Windows.System.Profile;
@@ -71,29 +72,30 @@ namespace Paint_Panel
 
         private void launchEffect()
         {
-
             var view = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView();
-            
+
+            var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            coreTitleBar.ExtendViewIntoTitleBar = true;
+
             // active
-            view.TitleBar.BackgroundColor = Color.FromArgb(255,45,45,48);
+            view.TitleBar.BackgroundColor = Colors.Transparent;
             view.TitleBar.ForegroundColor = Colors.White;
 
-
             // inactive
-            view.TitleBar.InactiveBackgroundColor = Color.FromArgb(255, 45, 45, 48);
+            view.TitleBar.InactiveBackgroundColor = Colors.Transparent;
             view.TitleBar.InactiveForegroundColor = Colors.White;
 
             // button
-            view.TitleBar.ButtonBackgroundColor = Color.FromArgb(255, 45, 45, 48);
+            view.TitleBar.ButtonBackgroundColor = Colors.Transparent;
             view.TitleBar.ButtonForegroundColor = Colors.White;
 
-            view.TitleBar.ButtonHoverBackgroundColor = Color.FromArgb(255, 75, 75, 78);
+            view.TitleBar.ButtonHoverBackgroundColor = Colors.Transparent;
             view.TitleBar.ButtonHoverForegroundColor = Colors.White;
 
-            view.TitleBar.ButtonPressedBackgroundColor = Color.FromArgb(255, 75, 75, 78);
+            view.TitleBar.ButtonPressedBackgroundColor = Colors.Transparent;
             view.TitleBar.ButtonPressedForegroundColor = Colors.White;
 
-            view.TitleBar.ButtonInactiveBackgroundColor = Color.FromArgb(255, 45, 45, 48);
+            view.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             view.TitleBar.ButtonInactiveForegroundColor = Colors.White;
         }
 
