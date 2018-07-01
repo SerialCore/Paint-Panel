@@ -8,9 +8,10 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid Background="Azure">
+    <Grid >
 
         <Grid x:Name="GlassHost"/>
+        <Grid x:Name="GlassColor" Background="Azure" Opacity="0.3"/>
 
         <Grid >
 
@@ -20,11 +21,12 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="300"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="300"/>
             </Grid.ColumnDefinitions>
 
-            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Background="Transparent">
+            <Grid Grid.Row="1" Grid.Column="1" Background="Transparent">
                 <InkToolbar x:Name="inkToolbar" Background="Transparent" TargetInkCanvas="{x:Bind inkCanvas}"
                             HorizontalAlignment="Center" >
                     <InkToolbarCustomPenButton 
@@ -47,25 +49,27 @@
                         <TextBlock x:Name="pens_icon" Text="&#xEDA8;" FontSize="17" FontFamily="Segoe MDL2 Assets" />
                     </InkToolbarCustomToolButton>
                 </InkToolbar>
-
-                <AppBarButton Click="open_functions" Height="48" Width="48" Background="Transparent" HorizontalAlignment="Left">
-                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE713;" />
-                </AppBarButton>
             </Grid>
 
-            <ScrollViewer Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
-                <Viewbox Stretch="Uniform" StretchDirection="Both" >
-                    <ScrollViewer ZoomMode="Enabled" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
-                        <Grid x:Name="uiElement">
-                            <Rectangle x:Name="panel_color" Fill="White" />
-                            <Image x:Name="back_image" />
-                            <InkCanvas x:Name="inkCanvas" SizeChanged="inkCanvas_SizeChanged"/>
-                        </Grid>
-                    </ScrollViewer>
+            <ScrollViewer x:Name="paint_panel" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" ZoomMode="Enabled" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+                <Viewbox Stretch="Uniform" StretchDirection="Both" Margin="50">
+                    <Grid x:Name="uiElement">
+                        <Rectangle x:Name="panel_color" Fill="White" />
+                        <Image x:Name="back_image" />
+                        <InkCanvas x:Name="inkCanvas" SizeChanged="inkCanvas_SizeChanged"/>
+                    </Grid>
                 </Viewbox>
             </ScrollViewer>
 
-            <Grid Grid.Row="1" Grid.Column="1" Background="Transparent">
+            <Grid Grid.Row="1" Grid.Column="0" Background="Transparent">
+                <StackPanel Orientation="Horizontal">
+                    <AppBarButton Click="open_functions" Background="Transparent" Height="48" Width="48">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE713;" />
+                    </AppBarButton>
+                </StackPanel>
+            </Grid>
+
+            <Grid Grid.Row="1" Grid.Column="2" Background="Transparent">
                 <StackPanel Orientation="Horizontal">
                     <AppBarButton Click="ink_undo" Background="Transparent" Height="48" Width="48">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE10E;" />
@@ -126,10 +130,12 @@
                             <TextBox x:Name="size_width" Width="100" Grid.Row="1" Grid.Column="1" InputScope="Number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                             <Button x:Uid="SizeSet" Grid.Column="2" Grid.RowSpan="2" Content="Set" Click="new_size" HorizontalAlignment="Center" VerticalAlignment="Stretch" Height="48" Width="55" Foreground="White" Background="#FF5156DC"/>
                         </Grid>
-                        <Pivot Grid.Row="1" x:Name="color_pane">
+                        <Pivot Grid.Row="1" x:Name="color_picker">
                             <PivotItem Header="Picker">
                                 <StackPanel >
-                                    <ToggleSwitch x:Name="color_toggle" OnContent="Color set for Background" OffContent="Color set for Pen"/>
+                                    <RadioButton x:Name="color_pen" Content="Pen Color" IsChecked="True"/>
+                                    <RadioButton x:Name="color_panel" Content="Panel Color"/>
+                                    <RadioButton x:Name="color_window" Content="Window Color" Unchecked="color_window_Unchecked"/>
                                     <ColorPicker x:Name="colorPicker" 
                                  IsColorSliderVisible="True"
                                  IsColorChannelTextInputVisible="True"

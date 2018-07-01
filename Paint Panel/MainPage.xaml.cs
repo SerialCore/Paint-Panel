@@ -39,8 +39,6 @@ namespace Paint_Panel
 
         public ObservableCollection<PensCollection> pensCollection { get; set; }
 
-        public ObservableCollection<ImageCollection> imageCollection { get; set; }
-
         public Stack<InkStroke> UndoStrokes { get; set; }
 
         StorageFolder folder = ApplicationData.Current.LocalFolder;
@@ -49,8 +47,17 @@ namespace Paint_Panel
         {
             // 页面的初始化
             this.InitializeComponent();
+            // 窗口颜色初始化
+            if(ApplicationData.Current.LocalSettings.Values.ContainsKey("colorA"))
+            {
+                Color color = Color.FromArgb(Convert.ToByte(ApplicationData.Current.LocalSettings.Values["colorA"]),
+                    Convert.ToByte(ApplicationData.Current.LocalSettings.Values["colorR"]),
+                    Convert.ToByte(ApplicationData.Current.LocalSettings.Values["colorG"]),
+                    Convert.ToByte(ApplicationData.Current.LocalSettings.Values["colorB"]));
+                GlassColor.Background = new SolidColorBrush(color);
+            }
             // 整个绘画面板尺寸的初始化，因为用了ViewBox，InkCanvas会自适应Image的尺寸
-            restore_image();
+            Initialize_Panel();
             // ink的初始化
             this.inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse
                 | Windows.UI.Core.CoreInputDeviceTypes.Pen;
@@ -65,8 +72,6 @@ namespace Paint_Panel
                 new PensCollection { Pen = new PencilBrush(), PenName = "Pencil Brush" },
                 new PensCollection { Pen = new InkBrush(), PenName = "Ink Brush" }
             };
-            imageCollection = new ObservableCollection<ImageCollection>();
-            refreshList();
             this.DataContext = this;
             // 墨迹堆栈
             UndoStrokes = new Stack<InkStroke>();
@@ -74,9 +79,8 @@ namespace Paint_Panel
 
         // 全局变量
         private IRandomAccessStream x;   //图片加载和图片编辑用到的随机读取流
-        private FilesOperator operate = new FilesOperator();  //文件操作的方法集合
-        private Color currentColor = PanelColors.White;    //当前选定的背景颜色
-        private ImageCollection currentImageItem = null;    //当前选定的背景集合项目
+        private Color currentPanel = Colors.White;    //当前选定的背景颜色
+        private Color currentWindow = Colors.Azure;    //当前选定的背景颜色
         private PrintHelper printHelper;
 
         #region 用户操作
@@ -98,33 +102,33 @@ namespace Paint_Panel
         private void pens_colors_Click(object sender, RoutedEventArgs e)
         {
             set_panel.IsPaneOpen = true;
-            color_pane.Visibility = Visibility.Collapsed;
+            color_picker.Visibility = Visibility.Collapsed;
             pens_list.Visibility = Visibility.Visible;
         }
 
         private async void save_composite(object sender, RoutedEventArgs e)
         {
             FileSavePicker picker = new FileSavePicker();
-            picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
             picker.SuggestedFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".png";
             picker.FileTypeChoices.Add("Image files", new string[] { ".png" });
             var file = await picker.PickSaveFileAsync();
             if (file != null)
             {
-                await operate.generateImage(file, inkCanvas, currentColor, back_image, x);
+                await FilesOperator.generateImage(file, inkCanvas, currentPanel, back_image, x);
             }
         }
 
         private async void save_nocolorInk(object sender, RoutedEventArgs e)
         {
             FileSavePicker picker = new FileSavePicker();
-            picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
             picker.SuggestedFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".png";
             picker.FileTypeChoices.Add("Image files", new string[] { ".png" });
             var file = await picker.PickSaveFileAsync();
             if (file != null)
             {
-                await operate.generateImage(file, inkCanvas);
+                await FilesOperator.generateImage(file, inkCanvas);
             }
         }
 
@@ -133,6 +137,31 @@ namespace Paint_Panel
             DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
             dataTransferManager.DataRequested += DataTransferManager_DataRequested;
             DataTransferManager.ShowShareUI();
+        }
+
+        private async void save_ink(object sender, RoutedEventArgs e)
+        {
+            IRandomAccessStream stream = new InMemoryRandomAccessStream();
+            try
+            {
+                await inkCanvas.InkPresenter.StrokeContainer.SaveAsync(stream);
+            }
+            catch
+            {
+                return;
+            }
+            FileSavePicker picker = new FileSavePicker();
+            picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+            picker.SuggestedFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".ink";
+            picker.FileTypeChoices.Add("Ink files", new string[] { ".ink" });
+            var file = await picker.PickSaveFileAsync();
+            if (file != null)
+            {
+                CachedFileManager.DeferUpdates(file);
+                var bt = await ConvertImagetoByte(stream);
+                await FileIO.WriteBytesAsync(file, bt);
+                await CachedFileManager.CompleteUpdatesAsync(file);
+            }
         }
 
         private async void DataTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
@@ -149,11 +178,11 @@ namespace Paint_Panel
             StorageFile file = await folder.CreateFileAsync(DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", CreationCollisionOption.ReplaceExisting);
             if (x == null)
             {
-                await operate.generateImage(file, inkCanvas, currentColor);
+                await FilesOperator.generateImage(file, inkCanvas, currentPanel);
             }
             else
             {
-                await operate.generateImage(file, inkCanvas, currentColor, back_image, x);
+                await FilesOperator.generateImage(file, inkCanvas, currentPanel, back_image, x);
             }
 
             // 将图片打包
@@ -195,31 +224,6 @@ namespace Paint_Panel
             }
         }
 
-        private async void save_ink(object sender, RoutedEventArgs e)
-        {
-            IRandomAccessStream stream = new InMemoryRandomAccessStream();
-            try
-            {
-                await inkCanvas.InkPresenter.StrokeContainer.SaveAsync(stream);
-            }
-            catch
-            {
-                return;
-            }
-            FileSavePicker picker = new FileSavePicker();
-            picker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
-            picker.SuggestedFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".ink";
-            picker.FileTypeChoices.Add("Ink files", new string[] { ".ink" });
-            var file = await picker.PickSaveFileAsync();
-            if (file != null)
-            {
-                CachedFileManager.DeferUpdates(file);
-                var bt = await ConvertImagetoByte(stream);
-                await FileIO.WriteBytesAsync(file, bt);
-                await CachedFileManager.CompleteUpdatesAsync(file);
-            }
-        }
-
         private void ink_undo(object sender, RoutedEventArgs e)
         {
             IReadOnlyList<InkStroke> strokes = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
@@ -253,14 +257,14 @@ namespace Paint_Panel
         {
             var item = e.ClickedItem as MyColors;
             panel_color.Fill = item.IndexColorBrush;
-            currentColor = item.IndexColor;
+            currentPanel = item.IndexColor;
         }
 
         private void pen_list_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as PensCollection;
             customPen.CustomPen = item.Pen;
-            color_pane.Visibility = Visibility.Visible;
+            color_picker.Visibility = Visibility.Visible;
             pens_list.Visibility = Visibility.Collapsed;
             set_panel.IsPaneOpen = false;
         }
@@ -286,14 +290,9 @@ namespace Paint_Panel
                 x.Dispose();
                 x = null;
             }
-            BitmapImage bi3 = new BitmapImage();
-            bi3.SetSource(stream);
-            back_image.Source = bi3;
-        }
-
-        private void image_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            currentImageItem = e.ClickedItem as ImageCollection;
+            BitmapImage bitmap = new BitmapImage();
+            bitmap.SetSource(stream);
+            back_image.Source = bitmap;
         }
 
         private void open_functions(object sender, RoutedEventArgs e)
@@ -305,16 +304,9 @@ namespace Paint_Panel
         {
             StorageFile printFile = await folder.CreateFileAsync(DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", CreationCollisionOption.ReplaceExisting);
             if (x != null)
-                await operate.generateImage(printFile, inkCanvas, currentColor, back_image, x);
+                await FilesOperator.generateImage(printFile, inkCanvas, currentPanel, back_image, x);
             else
-                await operate.generateImage(printFile, inkCanvas, currentColor);
-
-            if (printFile != null)
-            {
-                IRandomAccessStream imageStream = new InMemoryRandomAccessStream();
-                imageStream = await printFile.OpenAsync(FileAccessMode.Read);
-                imageCollection.Add(new ImageCollection { FileName = printFile.Name, ImageStream = imageStream, ImageFile = getBitmapImage(imageStream) });
-            }
+                await FilesOperator.generateImage(printFile, inkCanvas, currentPanel);
 
             var stream = await printFile.OpenReadAsync();
             var bitmapImage = new BitmapImage();
@@ -354,7 +346,7 @@ namespace Paint_Panel
 
         private void clear_img(object sender, RoutedEventArgs e)
         {
-            restore_image();
+            Initialize_Panel();
             if (x != null)
             {
                 x.Dispose();
@@ -362,7 +354,7 @@ namespace Paint_Panel
             }
         }
 
-        private async void restore_image()
+        private async void Initialize_Panel()
         {
             StorageFile image_file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Background/PC_Background.png"));
             BitmapImage image = new BitmapImage();
@@ -378,23 +370,6 @@ namespace Paint_Panel
             byte[] pixels = new byte[fileStream.Size];
             reader.ReadBytes(pixels);
             return pixels;
-        }
-
-        private async void refreshList()
-        {
-            IReadOnlyList<StorageFile> storageFiles = await folder.GetFilesAsync();
-            if (imageCollection != null)
-                imageCollection.Clear();
-            await Dispatcher.RunAsync(CoreDispatcherPriority.Normal, async () =>
-            {
-                IRandomAccessStream stream = new InMemoryRandomAccessStream();
-                foreach (StorageFile item in storageFiles)
-                {
-                    stream = await item.OpenAsync(FileAccessMode.Read);
-                    imageCollection.Add(new ImageCollection { FileName = item.Name, ImageStream = stream, ImageFile = getBitmapImage(stream) });
-                    await Task.Delay(100);
-                }
-            });
         }
 
         private BitmapImage getBitmapImage(IRandomAccessStream indexStream)
@@ -459,18 +434,31 @@ namespace Paint_Panel
 
         private void colorPicker_ColorChanged(ColorPicker sender, ColorChangedEventArgs args)
         {
-            if (color_toggle.IsOn)
-            {
-                panel_color.Fill = new SolidColorBrush(args.NewColor);
-                currentColor = args.NewColor;
-            }
-            else
+            if((bool)(color_pen.IsChecked))
             {
                 InkDrawingAttributes drawingAttributes = inkCanvas.InkPresenter.CopyDefaultDrawingAttributes();
                 drawingAttributes.Color = args.NewColor;
                 inkCanvas.InkPresenter.UpdateDefaultDrawingAttributes(drawingAttributes);
                 inkToolbar.InkDrawingAttributes.Color = args.NewColor;
             }
+            else if ((bool)(color_panel.IsChecked))
+            {
+                panel_color.Fill = new SolidColorBrush(args.NewColor);
+                currentPanel = args.NewColor;
+            }
+            else
+            {
+                GlassColor.Background = new SolidColorBrush(args.NewColor);
+                currentWindow = args.NewColor;
+            }
+        }
+
+        private void color_window_Unchecked(object sender, RoutedEventArgs e)
+        {
+            ApplicationData.Current.LocalSettings.Values["colorA"] = Convert.ToInt32(currentWindow.A);
+            ApplicationData.Current.LocalSettings.Values["colorR"] = Convert.ToInt32(currentWindow.R);
+            ApplicationData.Current.LocalSettings.Values["colorG"] = Convert.ToInt32(currentWindow.B);
+            ApplicationData.Current.LocalSettings.Values["colorB"] = Convert.ToInt32(currentWindow.G);
         }
 
         private async void PrintHelper_OnPrintSucceeded()
@@ -503,16 +491,6 @@ namespace Paint_Panel
         }
 
         #endregion
-
-    }
-
-    public class ImageCollection
-    {
-        public string FileName { get; set; }
-
-        public IRandomAccessStream ImageStream { get; set; }
-
-        public BitmapImage ImageFile { get; set; }
 
     }
 
