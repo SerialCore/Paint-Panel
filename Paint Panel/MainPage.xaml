@@ -53,6 +53,9 @@
 
             <ScrollViewer x:Name="paint_panel" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" ZoomMode="Enabled" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
                 <Viewbox Stretch="Uniform" StretchDirection="Both" Margin="50">
+                    <Viewbox.RenderTransform>
+                        <ScaleTransform x:Name="scale_panel"/>
+                    </Viewbox.RenderTransform>
                     <Grid x:Name="uiElement">
                         <Rectangle x:Name="panel_color" Fill="White" />
                         <Image x:Name="back_image" />
@@ -65,6 +68,12 @@
                 <StackPanel Orientation="Horizontal">
                     <AppBarButton Click="open_functions" Background="Transparent" Height="48" Width="48">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE713;" />
+                    </AppBarButton>
+                    <AppBarButton Click="zoom_in" Background="Transparent" Height="48" Width="48">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE12E;" />
+                    </AppBarButton>
+                    <AppBarButton Click="zoom_out" Background="Transparent" Height="48" Width="48">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE1A4;" />
                     </AppBarButton>
                 </StackPanel>
             </Grid>
@@ -132,11 +141,12 @@
                         </Grid>
                         <Pivot Grid.Row="1" x:Name="color_picker">
                             <PivotItem Header="Picker">
-                                <StackPanel >
-                                    <RadioButton x:Name="color_pen" Content="Pen Color" IsChecked="True"/>
-                                    <RadioButton x:Name="color_panel" Content="Panel Color"/>
-                                    <RadioButton x:Name="color_window" Content="Window Color" Unchecked="color_window_Unchecked"/>
-                                    <ColorPicker x:Name="colorPicker" 
+                                <ScrollViewer>
+                                    <StackPanel >
+                                        <RadioButton x:Name="color_pen" Content="Pen Color" IsChecked="True"/>
+                                        <RadioButton x:Name="color_panel" Content="Panel Color"/>
+                                        <RadioButton x:Name="color_window" Content="Window Color" Unchecked="color_window_Unchecked"/>
+                                        <ColorPicker x:Name="colorPicker" 
                                  IsColorSliderVisible="True"
                                  IsColorChannelTextInputVisible="True"
                                  IsHexInputVisible="True"
@@ -145,7 +155,8 @@
                                  IsAlphaTextInputVisible="True" 
                                  ColorChanged="colorPicker_ColorChanged"
                                  Margin="4"/>
-                                </StackPanel>
+                                    </StackPanel>
+                                </ScrollViewer>
                             </PivotItem>
                             <PivotItem Header="Pane">
                                 <ListView ItemsSource="{Binding myColors}" IsItemClickEnabled="True" ItemClick="color_list_ItemClick" SelectionMode="Single">

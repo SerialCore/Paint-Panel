@@ -295,6 +295,22 @@ namespace Paint_Panel
             back_image.Source = bitmap;
         }
 
+        private void zoom_in(object sender, RoutedEventArgs e)
+        {
+            scale_panel.CenterX = paint_panel.ActualWidth / 2;
+            scale_panel.CenterY = paint_panel.ActualHeight / 2;
+            scale_panel.ScaleX += 0.1;
+            scale_panel.ScaleY += 0.1;
+        }
+
+        private void zoom_out(object sender, RoutedEventArgs e)
+        {
+            scale_panel.CenterX = paint_panel.ActualWidth / 2;
+            scale_panel.CenterY = paint_panel.ActualHeight / 2;
+            scale_panel.ScaleX -= 0.1;
+            scale_panel.ScaleY -= 0.1;
+        }
+
         private void open_functions(object sender, RoutedEventArgs e)
         {
             set_panel.IsPaneOpen = !set_panel.IsPaneOpen;
@@ -457,8 +473,8 @@ namespace Paint_Panel
         {
             ApplicationData.Current.LocalSettings.Values["colorA"] = Convert.ToInt32(currentWindow.A);
             ApplicationData.Current.LocalSettings.Values["colorR"] = Convert.ToInt32(currentWindow.R);
-            ApplicationData.Current.LocalSettings.Values["colorG"] = Convert.ToInt32(currentWindow.B);
-            ApplicationData.Current.LocalSettings.Values["colorB"] = Convert.ToInt32(currentWindow.G);
+            ApplicationData.Current.LocalSettings.Values["colorG"] = Convert.ToInt32(currentWindow.G);
+            ApplicationData.Current.LocalSettings.Values["colorB"] = Convert.ToInt32(currentWindow.B);
         }
 
         private async void PrintHelper_OnPrintSucceeded()
