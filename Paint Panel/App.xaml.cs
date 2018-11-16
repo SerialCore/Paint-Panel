@@ -1,10 +1,10 @@
-﻿using System;
+﻿using Microsoft.AppCenter;
+using Microsoft.AppCenter.Push;
+using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.ApplicationModel.Core;
-using Windows.Foundation.Metadata;
 using Windows.Storage;
-using Windows.System.Profile;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -23,6 +23,7 @@ namespace Paint_Panel
         /// </summary>
         public App()
         {
+            AppCenter.Start("ab61ecc4-4e03-4f17-8c18-d38287ce78e6", typeof(Push));
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
