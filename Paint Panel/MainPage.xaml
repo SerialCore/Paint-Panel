@@ -33,9 +33,7 @@
                         x:Name="customPen"
                         MinStrokeWidth="1" MaxStrokeWidth="20" SelectedStrokeWidth="3"
                         SelectedBrushIndex ="1">
-                        <Grid >
-                            <TextBlock Text="&#xEDFB;" FontSize="17" FontFamily="Segoe MDL2 Assets"/>
-                        </Grid>
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEE56;" />
                         <InkToolbarCustomPenButton.ConfigurationContent>
                             <InkToolbarPenConfigurationControl />
                         </InkToolbarCustomPenButton.ConfigurationContent>
@@ -46,23 +44,10 @@
                     </InkToolbarCustomToggleButton>
                     <InkToolbarCustomToolButton 
                         x:Name="pens_colors" Click="pens_colors_Click">
-                        <TextBlock x:Name="pens_icon" Text="&#xEDA8;" FontSize="17" FontFamily="Segoe MDL2 Assets" />
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF45E;" />
                     </InkToolbarCustomToolButton>
                 </InkToolbar>
             </Grid>
-
-            <ScrollViewer x:Name="paint_panel" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" ZoomMode="Enabled" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
-                <Viewbox Stretch="Uniform" StretchDirection="Both" Margin="50">
-                    <Viewbox.RenderTransform>
-                        <ScaleTransform x:Name="scale_panel"/>
-                    </Viewbox.RenderTransform>
-                    <Grid x:Name="uiElement">
-                        <Rectangle x:Name="panel_color" Fill="White" />
-                        <Image x:Name="back_image" />
-                        <InkCanvas x:Name="inkCanvas" SizeChanged="inkCanvas_SizeChanged"/>
-                    </Grid>
-                </Viewbox>
-            </ScrollViewer>
 
             <Grid Grid.Row="1" Grid.Column="0" Background="Transparent">
                 <StackPanel Orientation="Horizontal">
@@ -113,40 +98,39 @@
                 </StackPanel>
             </Grid>
 
-        </Grid>
-
-        <SplitView x:Name="set_panel" OpenPaneLength="300" CompactPaneLength="0" PaneBackground="#FFF0F2F3" DisplayMode="CompactOverlay" Margin="0,80,0,0">
-            <SplitView.Pane>
-                <Grid>
-                    <Grid Grid.Column="0" Background="#FFF0F2F3" RequestedTheme="Light">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="100"/>
-                            <RowDefinition Height="*"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Row="0" Padding="5" >
+            <SplitView x:Name="set_panel" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
+                       OpenPaneLength="300" CompactPaneLength="0" PaneBackground="#FFF0F2F3" DisplayMode="CompactInline">
+                <SplitView.Pane>
+                    <Grid>
+                        <Grid Grid.Column="0" Background="#FFF0F2F3" RequestedTheme="Light">
                             <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
+                                <RowDefinition Height="100"/>
+                                <RowDefinition Height="*"/>
                             </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="100"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock x:Uid="CanvasHeight" Text="Height" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBox x:Name="size_hight" Width="100" Grid.Row="0" Grid.Column="1" InputScope="Number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBlock x:Uid="CanvasWidth" Text="Width" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <TextBox x:Name="size_width" Width="100" Grid.Row="1" Grid.Column="1" InputScope="Number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <Button x:Uid="SizeSet" Grid.Column="2" Grid.RowSpan="2" Content="Set" Click="new_size" HorizontalAlignment="Center" VerticalAlignment="Stretch" Height="48" Width="55" Foreground="White" Background="#FF5156DC"/>
-                        </Grid>
-                        <Pivot Grid.Row="1" x:Name="color_picker">
-                            <PivotItem Header="Picker">
-                                <ScrollViewer>
-                                    <StackPanel >
-                                        <RadioButton x:Name="color_pen" Content="Pen Color" IsChecked="True"/>
-                                        <RadioButton x:Name="color_panel" Content="Panel Color"/>
-                                        <RadioButton x:Name="color_window" Content="Window Color" Unchecked="color_window_Unchecked"/>
-                                        <ColorPicker x:Name="colorPicker" 
+                            <Grid Grid.Row="0" Padding="5" >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="100"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock x:Uid="CanvasHeight" Text="Height" Grid.Row="0" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBox x:Name="size_hight" Width="100" Grid.Row="0" Grid.Column="1" InputScope="Number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBlock x:Uid="CanvasWidth" Text="Width" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <TextBox x:Name="size_width" Width="100" Grid.Row="1" Grid.Column="1" InputScope="Number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Button x:Uid="SizeSet" Grid.Column="2" Grid.RowSpan="2" Content="Set" Click="new_size" HorizontalAlignment="Center" VerticalAlignment="Stretch" Height="48" Width="55" Foreground="White" Background="#FF5156DC"/>
+                            </Grid>
+                            <Pivot Grid.Row="1" x:Name="color_picker">
+                                <PivotItem Header="Picker">
+                                    <ScrollViewer>
+                                        <StackPanel >
+                                            <RadioButton x:Name="color_pen" Content="Pen Color" IsChecked="True"/>
+                                            <RadioButton x:Name="color_panel" Content="Panel Color"/>
+                                            <RadioButton x:Name="color_window" Content="Window Color" Unchecked="color_window_Unchecked"/>
+                                            <ColorPicker x:Name="colorPicker" 
                                  IsColorSliderVisible="True"
                                  IsColorChannelTextInputVisible="True"
                                  IsHexInputVisible="True"
@@ -155,51 +139,67 @@
                                  IsAlphaTextInputVisible="True" 
                                  ColorChanged="colorPicker_ColorChanged"
                                  Margin="4"/>
-                                    </StackPanel>
-                                </ScrollViewer>
-                            </PivotItem>
-                            <PivotItem Header="Pane">
-                                <ListView ItemsSource="{Binding myColors}" IsItemClickEnabled="True" ItemClick="color_list_ItemClick" SelectionMode="Single">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid Height="48">
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="24"/>
-                                                    <ColumnDefinition />
-                                                </Grid.ColumnDefinitions>
-                                                <Rectangle Grid.Column="0" Fill="{Binding IndexColorBrush}" Height="20" Width="20"/>
-                                                <TextBlock Grid.Column="1" Text="{Binding ColorName}" Margin="24,0,0,0" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </PivotItem>
-                        </Pivot>
-                        <ScrollViewer x:Name="pens_list" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </PivotItem>
+                                <PivotItem Header="Pane">
+                                    <ListView ItemsSource="{Binding myColors}" IsItemClickEnabled="True" ItemClick="color_list_ItemClick" SelectionMode="Single">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Height="48">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="24"/>
+                                                        <ColumnDefinition />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Rectangle Grid.Column="0" Fill="{Binding IndexColorBrush}" Height="20" Width="20"/>
+                                                    <TextBlock Grid.Column="1" Text="{Binding ColorName}" Margin="24,0,0,0" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </PivotItem>
+                            </Pivot>
+                            <ScrollViewer x:Name="pens_list" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                                   Visibility="Collapsed">
-                            <Grid >
-                                <ListView ItemsSource="{Binding pensCollection}" IsItemClickEnabled="True" ItemClick="pen_list_ItemClick"  SelectionMode="Single">
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <TextBlock Text="{Binding PenName}" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
-                            </Grid>
-                        </ScrollViewer>
+                                <Grid >
+                                    <ListView ItemsSource="{Binding pensCollection}" IsItemClickEnabled="True" ItemClick="pen_list_ItemClick"  SelectionMode="Single">
+                                        <ListView.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding PenName}" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
+                                            </DataTemplate>
+                                        </ListView.ItemTemplate>
+                                    </ListView>
+                                </Grid>
+                            </ScrollViewer>
 
-                        <Grid>
-                            <Grid x:Name="Container" Opacity="0" />
-                            <Grid x:Name="DirectPrintContainer">
-                                <StackPanel x:Name="PrintableContent" Margin="50,20" Orientation="Vertical">
-                                    <Image x:Name="printImage" Visibility="Visible" Stretch="UniformToFill"/>
-                                </StackPanel>
+                            <Grid>
+                                <Grid x:Name="Container" Opacity="0" />
+                                <Grid x:Name="DirectPrintContainer">
+                                    <StackPanel x:Name="PrintableContent" Margin="50,20" Orientation="Vertical">
+                                        <Image x:Name="printImage" Visibility="Visible" Stretch="UniformToFill"/>
+                                    </StackPanel>
+                                </Grid>
                             </Grid>
                         </Grid>
                     </Grid>
-                </Grid>
-            </SplitView.Pane>
-        </SplitView>
+                </SplitView.Pane>
+                <SplitView.Content>
+                    <ScrollViewer x:Name="paint_panel" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" ZoomMode="Enabled" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+                        <Viewbox Stretch="Uniform" StretchDirection="Both" Margin="50">
+                            <Viewbox.RenderTransform>
+                                <ScaleTransform x:Name="scale_panel"/>
+                            </Viewbox.RenderTransform>
+                            <Grid x:Name="uiElement">
+                                <Rectangle x:Name="panel_color" Fill="White" />
+                                <Image x:Name="back_image" />
+                                <InkCanvas x:Name="inkCanvas" SizeChanged="inkCanvas_SizeChanged"/>
+                            </Grid>
+                        </Viewbox>
+                    </ScrollViewer>
+                </SplitView.Content>
+            </SplitView>
+
+        </Grid>
 
     </Grid>
 
