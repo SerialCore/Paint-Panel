@@ -39,11 +39,11 @@
                         </InkToolbarCustomPenButton.ConfigurationContent>
                     </InkToolbarCustomPenButton>
                     <InkToolbarCustomToggleButton 
-                    x:Name="inputDevice" Click="inputDevice_Click">
+                    x:Name="inputDevice" Click="InputDevice_Click">
                         <TextBlock x:Name="inputDevice_icon" Text="&#xED5F;" FontSize="17" FontFamily="Segoe MDL2 Assets"/>
                     </InkToolbarCustomToggleButton>
                     <InkToolbarCustomToolButton 
-                        x:Name="pens_colors" Click="pens_colors_Click">
+                        x:Name="pens_colors" Click="PenColors_Click">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF45E;" />
                     </InkToolbarCustomToolButton>
                 </InkToolbar>
@@ -51,55 +51,58 @@
 
             <Grid Grid.Row="1" Grid.Column="0" Background="Transparent">
                 <StackPanel Orientation="Horizontal">
-                    <AppBarButton Click="open_functions" Background="Transparent" Height="48" Width="48">
+                    <AppBarButton Click="OpenFunctions" Background="Transparent" Height="48" Width="48">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE713;" />
                     </AppBarButton>
-                    <AppBarButton Click="zoom_in" Background="Transparent" Height="48" Width="48">
+                    <AppBarButton Tapped="FlyoutBase_Tapped" Background="Transparent" Height="48" Width="48">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE12E;" />
-                    </AppBarButton>
-                    <AppBarButton Click="zoom_out" Background="Transparent" Height="48" Width="48">
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE1A4;" />
+                        <FlyoutBase.AttachedFlyout>
+                            <Flyout>
+                                <Slider x:Name="ZoomSlider" ValueChanged="ZoomSlider_ValueChanged"
+                                        Value="0" Maximum="8" Minimum="-8" Width="200"/>
+                            </Flyout>
+                        </FlyoutBase.AttachedFlyout>
                     </AppBarButton>
                 </StackPanel>
             </Grid>
 
             <Grid Grid.Row="1" Grid.Column="2" Background="Transparent">
                 <StackPanel Orientation="Horizontal">
-                    <AppBarButton Click="ink_undo" Background="Transparent" Height="48" Width="48">
+                    <AppBarButton Click="Ink_Undo" Background="Transparent" Height="48" Width="48">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE10E;" />
                     </AppBarButton>
-                    <AppBarButton Click="ink_redo"  Background="Transparent" Height="48" Width="48">
+                    <AppBarButton Click="Ink_Redo"  Background="Transparent" Height="48" Width="48">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE10D;" />
                     </AppBarButton>
-                    <AppBarButton Tapped="flyoutBase_Tapped" Background="Transparent" Height="48" Width="48">
+                    <AppBarButton Tapped="FlyoutBase_Tapped" Background="Transparent" Height="48" Width="48">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE197;" />
                         <FlyoutBase.AttachedFlyout>
                             <MenuFlyout>
-                                <MenuFlyoutItem x:Uid="OpenImage" Text="Open Image" Click="pick_img"/>
-                                <MenuFlyoutItem x:Uid="OpenInk" Text="Open Ink" Click="open_ink"/>
-                                <MenuFlyoutItem x:Uid="DefaultSet" Text="Clear Image" Click="clear_img"/>
+                                <MenuFlyoutItem x:Uid="OpenImage" Text="Open Image" Click="PickImage"/>
+                                <MenuFlyoutItem x:Uid="OpenInk" Text="Open Ink" Click="OpenInk"/>
+                                <MenuFlyoutItem x:Uid="DefaultSet" Text="Clear Image" Click="ClearImage"/>
                             </MenuFlyout>
                         </FlyoutBase.AttachedFlyout>
                     </AppBarButton>
-                    <AppBarButton Tapped="flyoutBase_Tapped" Background="Transparent" Height="48" Width="48">
+                    <AppBarButton Tapped="FlyoutBase_Tapped" Background="Transparent" Height="48" Width="48">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE72D;" />
                         <FlyoutBase.AttachedFlyout>
                             <MenuFlyout >
                                 <MenuFlyoutSubItem x:Uid="SaveAsImage" Text="Save as Image">
-                                    <MenuFlyoutItem x:Uid="CompositeImage" Text="Composite Image" Click="save_composite"/>
-                                    <MenuFlyoutItem x:Uid="InkwithoutBackground" Text="Ink without Background" Click="save_nocolorInk"/>
+                                    <MenuFlyoutItem x:Uid="CompositeImage" Text="Composite Image" Click="SaveComposite"/>
+                                    <MenuFlyoutItem x:Uid="InkwithoutBackground" Text="Ink without Background" Click="SaveNocolorInk"/>
                                 </MenuFlyoutSubItem>
-                                <MenuFlyoutItem x:Uid="SaveAsInk" Text="Save as Ink" Click="save_ink"/>
-                                <MenuFlyoutItem x:Uid="PrintImage" Text="Print Image" Click="print_image"/>
-                                <MenuFlyoutItem x:Uid="ShareImage" Text="Share Image" Click="share_img"/>
+                                <MenuFlyoutItem x:Uid="SaveAsInk" Text="Save as Ink" Click="SaveInk"/>
+                                <MenuFlyoutItem x:Uid="PrintImage" Text="Print Image" Click="PrintImage"/>
+                                <MenuFlyoutItem x:Uid="ShareImage" Text="Share Image" Click="ShareImage"/>
                             </MenuFlyout>
                         </FlyoutBase.AttachedFlyout>
                     </AppBarButton>
                 </StackPanel>
             </Grid>
 
-            <SplitView x:Name="set_panel" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3"
-                       OpenPaneLength="300" CompactPaneLength="0" PaneBackground="#FFF0F2F3" DisplayMode="CompactInline">
+            <SplitView x:Name="set_panel" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" Background="AliceBlue"
+                       OpenPaneLength="350" CompactPaneLength="0" PaneBackground="#FFF0F2F3" DisplayMode="CompactInline">
                 <SplitView.Pane>
                     <Grid>
                         <Grid Grid.Column="0" Background="#FFF0F2F3" RequestedTheme="Light">
@@ -121,7 +124,7 @@
                                 <TextBox x:Name="size_hight" Width="100" Grid.Row="0" Grid.Column="1" InputScope="Number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <TextBlock x:Uid="CanvasWidth" Text="Width" Grid.Row="1" Grid.Column="0" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <TextBox x:Name="size_width" Width="100" Grid.Row="1" Grid.Column="1" InputScope="Number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                <Button x:Uid="SizeSet" Grid.Column="2" Grid.RowSpan="2" Content="Set" Click="new_size" HorizontalAlignment="Center" VerticalAlignment="Stretch" Height="48" Width="55" Foreground="White" Background="#FF5156DC"/>
+                                <Button x:Uid="SizeSet" Grid.Column="2" Grid.RowSpan="2" Content="Set" Click="NewSize" Margin="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" Background="CornflowerBlue"/>
                             </Grid>
                             <Pivot Grid.Row="1" x:Name="color_picker">
                                 <PivotItem Header="Picker">
@@ -129,7 +132,7 @@
                                         <StackPanel >
                                             <RadioButton x:Name="color_pen" Content="Pen Color" IsChecked="True"/>
                                             <RadioButton x:Name="color_panel" Content="Panel Color"/>
-                                            <RadioButton x:Name="color_window" Content="Window Color" Unchecked="color_window_Unchecked"/>
+                                            <RadioButton x:Name="color_window" Content="Window Color" Unchecked="ColorWindow_Unchecked"/>
                                             <ColorPicker x:Name="colorPicker" 
                                  IsColorSliderVisible="True"
                                  IsColorChannelTextInputVisible="True"
@@ -137,13 +140,13 @@
                                  IsAlphaEnabled="False"
                                  IsAlphaSliderVisible="True"
                                  IsAlphaTextInputVisible="True" 
-                                 ColorChanged="colorPicker_ColorChanged"
+                                 ColorChanged="ColorPicker_ColorChanged"
                                  Margin="4"/>
                                         </StackPanel>
                                     </ScrollViewer>
                                 </PivotItem>
                                 <PivotItem Header="Pane">
-                                    <ListView ItemsSource="{Binding myColors}" IsItemClickEnabled="True" ItemClick="color_list_ItemClick" SelectionMode="Single">
+                                    <ListView ItemsSource="{Binding myColors}" IsItemClickEnabled="True" ItemClick="ColorList_ItemClick" SelectionMode="Single">
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <Grid Height="48">
@@ -162,7 +165,7 @@
                             <ScrollViewer x:Name="pens_list" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
                                   Visibility="Collapsed">
                                 <Grid >
-                                    <ListView ItemsSource="{Binding pensCollection}" IsItemClickEnabled="True" ItemClick="pen_list_ItemClick"  SelectionMode="Single">
+                                    <ListView ItemsSource="{Binding pensCollection}" IsItemClickEnabled="True" ItemClick="PenList_ItemClick"  SelectionMode="Single">
                                         <ListView.ItemTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding PenName}" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
@@ -184,16 +187,19 @@
                     </Grid>
                 </SplitView.Pane>
                 <SplitView.Content>
-                    <ScrollViewer x:Name="paint_panel" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="3" ZoomMode="Enabled" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
+                    <ScrollViewer x:Name="paint_panel" ZoomMode="Enabled" HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible">
                         <Viewbox Stretch="Uniform" StretchDirection="Both" Margin="50">
                             <Viewbox.RenderTransform>
                                 <ScaleTransform x:Name="scale_panel"/>
                             </Viewbox.RenderTransform>
-                            <Grid x:Name="uiElement">
-                                <Rectangle x:Name="panel_color" Fill="White" />
-                                <Image x:Name="back_image" />
-                                <InkCanvas x:Name="inkCanvas" SizeChanged="inkCanvas_SizeChanged"/>
-                            </Grid>
+                            <controls:DropShadowPanel BlurRadius="8" ShadowOpacity="0.5" Color="Black"
+                                  OffsetX="2" OffsetY="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                                <Grid x:Name="uiElement">
+                                    <Rectangle x:Name="panel_color" Fill="White" />
+                                    <Image x:Name="back_image" />
+                                    <InkCanvas x:Name="inkCanvas" SizeChanged="InkCanvas_SizeChanged"/>
+                                </Grid>
+                            </controls:DropShadowPanel>
                         </Viewbox>
                     </ScrollViewer>
                 </SplitView.Content>

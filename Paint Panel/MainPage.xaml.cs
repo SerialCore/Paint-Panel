@@ -53,7 +53,7 @@ namespace Paint_Panel
                 GlassColor.Background = new SolidColorBrush(color);
             }
             // 整个绘画面板尺寸的初始化，因为用了ViewBox，InkCanvas会自适应Image的尺寸
-            Initialize_Panel();
+            InitializePanel();
             // ink的初始化
             this.inkCanvas.InkPresenter.InputDeviceTypes = Windows.UI.Core.CoreInputDeviceTypes.Mouse
                 | Windows.UI.Core.CoreInputDeviceTypes.Pen;
@@ -74,6 +74,7 @@ namespace Paint_Panel
         }
 
         // 全局变量
+        private double currentScale;
         private IRandomAccessStream x;   //图片加载和图片编辑用到的随机读取流
         private Color currentPanel = Colors.White;    //当前选定的背景颜色
         private Color currentWindow = Colors.Azure;    //当前选定的背景颜色
@@ -81,7 +82,7 @@ namespace Paint_Panel
 
         #region 用户操作
 
-        private void inputDevice_Click(object sender, RoutedEventArgs e)
+        private void InputDevice_Click(object sender, RoutedEventArgs e)
         {
             if (inputDevice.IsChecked == true)
             {
@@ -95,14 +96,14 @@ namespace Paint_Panel
             }
         }
 
-        private void pens_colors_Click(object sender, RoutedEventArgs e)
+        private void PenColors_Click(object sender, RoutedEventArgs e)
         {
             set_panel.IsPaneOpen = true;
             color_picker.Visibility = Visibility.Collapsed;
             pens_list.Visibility = Visibility.Visible;
         }
 
-        private async void save_composite(object sender, RoutedEventArgs e)
+        private async void SaveComposite(object sender, RoutedEventArgs e)
         {
             FileSavePicker picker = new FileSavePicker();
             picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
@@ -115,7 +116,7 @@ namespace Paint_Panel
             }
         }
 
-        private async void save_nocolorInk(object sender, RoutedEventArgs e)
+        private async void SaveNocolorInk(object sender, RoutedEventArgs e)
         {
             FileSavePicker picker = new FileSavePicker();
             picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
@@ -128,14 +129,14 @@ namespace Paint_Panel
             }
         }
 
-        private void share_img(object sender, RoutedEventArgs e)
+        private void ShareImage(object sender, RoutedEventArgs e)
         {
             DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
             dataTransferManager.DataRequested += DataTransferManager_DataRequested;
             DataTransferManager.ShowShareUI();
         }
 
-        private async void save_ink(object sender, RoutedEventArgs e)
+        private async void SaveInk(object sender, RoutedEventArgs e)
         {
             IRandomAccessStream stream = new InMemoryRandomAccessStream();
             try
@@ -190,7 +191,7 @@ namespace Paint_Panel
             deferral.Complete();
         }
 
-        private async void pick_img(object sender, RoutedEventArgs e)
+        private async void PickImage(object sender, RoutedEventArgs e)
         {
             FileOpenPicker picker = new FileOpenPicker();
             picker.FileTypeFilter.Add(".png");
@@ -205,7 +206,7 @@ namespace Paint_Panel
             }
         }
 
-        private async void open_ink(object sender, RoutedEventArgs e)
+        private async void OpenInk(object sender, RoutedEventArgs e)
         {
             var picker = new FileOpenPicker
             {
@@ -220,7 +221,7 @@ namespace Paint_Panel
             }
         }
 
-        private void ink_undo(object sender, RoutedEventArgs e)
+        private void Ink_Undo(object sender, RoutedEventArgs e)
         {
             IReadOnlyList<InkStroke> strokes = inkCanvas.InkPresenter.StrokeContainer.GetStrokes();
             if (strokes.Count > 0)
@@ -231,7 +232,7 @@ namespace Paint_Panel
             }
         }
 
-        private void ink_redo(object sender, RoutedEventArgs e)
+        private void Ink_Redo(object sender, RoutedEventArgs e)
         {
             if (UndoStrokes.Count > 0)
             {
@@ -249,14 +250,14 @@ namespace Paint_Panel
             }
         }
 
-        private void color_list_ItemClick(object sender, ItemClickEventArgs e)
+        private void ColorList_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as MyColors;
             panel_color.Fill = item.IndexColorBrush;
             currentPanel = item.IndexColor;
         }
 
-        private void pen_list_ItemClick(object sender, ItemClickEventArgs e)
+        private void PenList_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as PensCollection;
             customPen.CustomPen = item.Pen;
@@ -265,7 +266,7 @@ namespace Paint_Panel
             set_panel.IsPaneOpen = false;
         }
 
-        private async void new_size(object sender, RoutedEventArgs e)
+        private async void NewSize(object sender, RoutedEventArgs e)
         {
             float hight, width;
             try
@@ -291,28 +292,19 @@ namespace Paint_Panel
             back_image.Source = bitmap;
         }
 
-        private void zoom_in(object sender, RoutedEventArgs e)
+        private void ZoomSlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             scale_panel.CenterX = paint_panel.ActualWidth / 2;
             scale_panel.CenterY = paint_panel.ActualHeight / 2;
-            scale_panel.ScaleX += 0.1;
-            scale_panel.ScaleY += 0.1;
+            scale_panel.ScaleX += 0.1 * (ZoomSlider.Value - currentScale);
+            scale_panel.ScaleY += 0.1 * (ZoomSlider.Value - currentScale);
+            currentScale = ZoomSlider.Value;
         }
 
-        private void zoom_out(object sender, RoutedEventArgs e)
-        {
-            scale_panel.CenterX = paint_panel.ActualWidth / 2;
-            scale_panel.CenterY = paint_panel.ActualHeight / 2;
-            scale_panel.ScaleX -= 0.1;
-            scale_panel.ScaleY -= 0.1;
-        }
+        private void OpenFunctions(object sender, RoutedEventArgs e)
+            => set_panel.IsPaneOpen = !set_panel.IsPaneOpen;
 
-        private void open_functions(object sender, RoutedEventArgs e)
-        {
-            set_panel.IsPaneOpen = !set_panel.IsPaneOpen;
-        }
-
-        private async void print_image(object sender, RoutedEventArgs e)
+        private async void PrintImage(object sender, RoutedEventArgs e)
         {
             StorageFile printFile = await folder.CreateFileAsync(DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", CreationCollisionOption.ReplaceExisting);
             if (x != null)
@@ -356,9 +348,9 @@ namespace Paint_Panel
             glassVisual.StartAnimation("Size", bindSizeAnimation);
         }
 
-        private void clear_img(object sender, RoutedEventArgs e)
+        private void ClearImage(object sender, RoutedEventArgs e)
         {
-            Initialize_Panel();
+            InitializePanel();
             if (x != null)
             {
                 x.Dispose();
@@ -366,7 +358,7 @@ namespace Paint_Panel
             }
         }
 
-        private async void Initialize_Panel()
+        private async void InitializePanel()
         {
             StorageFile image_file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Background/PC_Background.png"));
             BitmapImage image = new BitmapImage();
@@ -384,7 +376,7 @@ namespace Paint_Panel
             return pixels;
         }
 
-        private BitmapImage getBitmapImage(IRandomAccessStream indexStream)
+        private BitmapImage GetBitmapImage(IRandomAccessStream indexStream)
         {
             BitmapImage bi3 = new BitmapImage();
             bi3.SetSource(indexStream);
@@ -433,18 +425,16 @@ namespace Paint_Panel
             customPen.Palette = PanelColors.ToolColors;
         }
 
-        private void flyoutBase_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
-        {
-            FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
-        }
+        private void FlyoutBase_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+            => FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
 
-        private void inkCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void InkCanvas_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             size_hight.Text = (inkCanvas.ActualHeight / 2.5).ToString();
             size_width.Text = (inkCanvas.ActualWidth / 2.5).ToString();
         }
 
-        private void colorPicker_ColorChanged(ColorPicker sender, ColorChangedEventArgs args)
+        private void ColorPicker_ColorChanged(ColorPicker sender, ColorChangedEventArgs args)
         {
             if((bool)(color_pen.IsChecked))
             {
@@ -465,7 +455,7 @@ namespace Paint_Panel
             }
         }
 
-        private void color_window_Unchecked(object sender, RoutedEventArgs e)
+        private void ColorWindow_Unchecked(object sender, RoutedEventArgs e)
         {
             ApplicationData.Current.LocalSettings.Values["colorA"] = Convert.ToInt32(currentWindow.A);
             ApplicationData.Current.LocalSettings.Values["colorR"] = Convert.ToInt32(currentWindow.R);
