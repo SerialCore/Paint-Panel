@@ -96,18 +96,13 @@ namespace Paint_Panel
             }
         }
 
-        private void PenColors_Click(object sender, RoutedEventArgs e)
-        {
-            set_panel.IsPaneOpen = true;
-            color_picker.Visibility = Visibility.Collapsed;
-            pens_list.Visibility = Visibility.Visible;
-        }
-
         private async void SaveComposite(object sender, RoutedEventArgs e)
         {
-            FileSavePicker picker = new FileSavePicker();
-            picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-            picker.SuggestedFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".png";
+            FileSavePicker picker = new FileSavePicker
+            {
+                SuggestedStartLocation = PickerLocationId.PicturesLibrary,
+                SuggestedFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".png"
+            };
             picker.FileTypeChoices.Add("Image files", new string[] { ".png" });
             var file = await picker.PickSaveFileAsync();
             if (file != null)
@@ -118,22 +113,17 @@ namespace Paint_Panel
 
         private async void SaveNocolorInk(object sender, RoutedEventArgs e)
         {
-            FileSavePicker picker = new FileSavePicker();
-            picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-            picker.SuggestedFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".png";
+            FileSavePicker picker = new FileSavePicker
+            {
+                SuggestedStartLocation = PickerLocationId.PicturesLibrary,
+                SuggestedFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".png"
+            };
             picker.FileTypeChoices.Add("Image files", new string[] { ".png" });
             var file = await picker.PickSaveFileAsync();
             if (file != null)
             {
                 await FilesOperator.generateImage(file, inkCanvas);
             }
-        }
-
-        private void ShareImage(object sender, RoutedEventArgs e)
-        {
-            DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
-            dataTransferManager.DataRequested += DataTransferManager_DataRequested;
-            DataTransferManager.ShowShareUI();
         }
 
         private async void SaveInk(object sender, RoutedEventArgs e)
@@ -147,9 +137,11 @@ namespace Paint_Panel
             {
                 return;
             }
-            FileSavePicker picker = new FileSavePicker();
-            picker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
-            picker.SuggestedFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".ink";
+            FileSavePicker picker = new FileSavePicker
+            {
+                SuggestedStartLocation = PickerLocationId.PicturesLibrary,
+                SuggestedFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".ink"
+            };
             picker.FileTypeChoices.Add("Ink files", new string[] { ".ink" });
             var file = await picker.PickSaveFileAsync();
             if (file != null)
@@ -161,6 +153,13 @@ namespace Paint_Panel
             }
         }
 
+        private void ShareImage(object sender, RoutedEventArgs e)
+        {
+            DataTransferManager dataTransferManager = DataTransferManager.GetForCurrentView();
+            dataTransferManager.DataRequested += DataTransferManager_DataRequested;
+            DataTransferManager.ShowShareUI();
+        }
+
         private async void DataTransferManager_DataRequested(DataTransferManager sender, DataRequestedEventArgs args)
         {
             // 加载图片要用到的延迟代码
@@ -168,8 +167,8 @@ namespace Paint_Panel
 
             // 共享请求的信息
             DataRequest request = args.Request;
-            request.Data.Properties.Title = "手绘";
-            request.Data.Properties.Description = "Share your painting";
+            request.Data.Properties.Title = "Painting";
+            //request.Data.Properties.Description = "Share your painting";
 
             // 图片生成
             StorageFile file = await folder.CreateFileAsync(DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", CreationCollisionOption.ReplaceExisting);
@@ -261,9 +260,8 @@ namespace Paint_Panel
         {
             var item = e.ClickedItem as PensCollection;
             customPen.CustomPen = item.Pen;
-            color_picker.Visibility = Visibility.Visible;
-            pens_list.Visibility = Visibility.Collapsed;
-            set_panel.IsPaneOpen = false;
+            customPen.SelectedStrokeWidth = 2;
+            customPen.SelectedStrokeWidth = 3;
         }
 
         private async void NewSize(object sender, RoutedEventArgs e)
@@ -391,10 +389,9 @@ namespace Paint_Panel
         {
             InitializeFrostedGlass(GlassHost);
 
-            var indexFile = e.Parameter as StorageFile;
-            if (indexFile != null)
+            if (e.Parameter is StorageFile indexFile)
             {
-                if(indexFile.FileType.Equals(".ink"))
+                if (indexFile.FileType.Equals(".ink"))
                 {
                     Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().Title = indexFile.Name;
 
@@ -402,7 +399,7 @@ namespace Paint_Panel
                     await inkCanvas.InkPresenter.StrokeContainer.LoadAsync(file);
                     return;
                 }
-                if(indexFile.FileType.Equals(".png") || indexFile.FileType.Equals(".jpg"))
+                if (indexFile.FileType.Equals(".png") || indexFile.FileType.Equals(".jpg"))
                 {
                     Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().Title = indexFile.Name;
 
@@ -436,14 +433,14 @@ namespace Paint_Panel
 
         private void ColorPicker_ColorChanged(ColorPicker sender, ColorChangedEventArgs args)
         {
-            if((bool)(color_pen.IsChecked))
+            if((bool)color_pen.IsChecked)
             {
                 InkDrawingAttributes drawingAttributes = inkCanvas.InkPresenter.CopyDefaultDrawingAttributes();
                 drawingAttributes.Color = args.NewColor;
                 inkCanvas.InkPresenter.UpdateDefaultDrawingAttributes(drawingAttributes);
                 inkToolbar.InkDrawingAttributes.Color = args.NewColor;
             }
-            else if ((bool)(color_panel.IsChecked))
+            else if ((bool)color_panel.IsChecked)
             {
                 panel_color.Fill = new SolidColorBrush(args.NewColor);
                 currentPanel = args.NewColor;

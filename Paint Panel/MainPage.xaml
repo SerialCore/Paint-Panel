@@ -32,20 +32,12 @@
                     <InkToolbarCustomPenButton 
                         x:Name="customPen"
                         MinStrokeWidth="1" MaxStrokeWidth="20" SelectedStrokeWidth="3"
-                        SelectedBrushIndex ="1">
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xEE56;" />
+                        SelectedBrushIndex="1">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF45E;" />
                         <InkToolbarCustomPenButton.ConfigurationContent>
                             <InkToolbarPenConfigurationControl />
                         </InkToolbarCustomPenButton.ConfigurationContent>
                     </InkToolbarCustomPenButton>
-                    <InkToolbarCustomToggleButton 
-                    x:Name="inputDevice" Click="InputDevice_Click">
-                        <TextBlock x:Name="inputDevice_icon" Text="&#xED5F;" FontSize="17" FontFamily="Segoe MDL2 Assets"/>
-                    </InkToolbarCustomToggleButton>
-                    <InkToolbarCustomToolButton 
-                        x:Name="pens_colors" Click="PenColors_Click">
-                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF45E;" />
-                    </InkToolbarCustomToolButton>
                 </InkToolbar>
             </Grid>
 
@@ -63,11 +55,49 @@
                             </Flyout>
                         </FlyoutBase.AttachedFlyout>
                     </AppBarButton>
+                    <AppBarButton Tapped="FlyoutBase_Tapped" Background="Transparent" Height="48" Width="48">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xF45E;" />
+                        <FlyoutBase.AttachedFlyout>
+                            <Flyout>
+                                <ListView ItemsSource="{Binding pensCollection}" IsItemClickEnabled="True" ItemClick="PenList_ItemClick"  SelectionMode="Single">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding PenName}" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Flyout>
+                        </FlyoutBase.AttachedFlyout>
+                    </AppBarButton>
+                    <AppBarButton Tapped="FlyoutBase_Tapped" Background="Transparent" Height="48" Width="48">
+                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE790;" />
+                        <FlyoutBase.AttachedFlyout>
+                            <Flyout>
+                                <ListView ItemsSource="{Binding myColors}" IsItemClickEnabled="True" ItemClick="ColorList_ItemClick" SelectionMode="Single">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Height="48">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="24"/>
+                                                    <ColumnDefinition />
+                                                </Grid.ColumnDefinitions>
+                                                <Rectangle Grid.Column="0" Fill="{Binding IndexColorBrush}" Height="20" Width="20"/>
+                                                <TextBlock Grid.Column="1" Text="{Binding ColorName}" Margin="24,0,0,0" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Flyout>
+                        </FlyoutBase.AttachedFlyout>
+                    </AppBarButton>
                 </StackPanel>
             </Grid>
 
             <Grid Grid.Row="1" Grid.Column="2" Background="Transparent">
                 <StackPanel Orientation="Horizontal">
+                    <AppBarToggleButton x:Name="inputDevice" Click="InputDevice_Click" Background="Transparent" Height="48" Width="48">
+                        <TextBlock x:Name="inputDevice_icon" Text="&#xED5F;" FontSize="17" FontFamily="Segoe MDL2 Assets"/>
+                    </AppBarToggleButton>
                     <AppBarButton Click="Ink_Undo" Background="Transparent" Height="48" Width="48">
                         <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE10E;" />
                     </AppBarButton>
@@ -126,8 +156,8 @@
                                 <TextBox x:Name="size_width" Width="100" Grid.Row="1" Grid.Column="1" InputScope="Number" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                 <Button x:Uid="SizeSet" Grid.Column="2" Grid.RowSpan="2" Content="Set" Click="NewSize" Margin="5" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Foreground="White" Background="CornflowerBlue"/>
                             </Grid>
-                            <Pivot Grid.Row="1" x:Name="color_picker">
-                                <PivotItem Header="Picker">
+                            <Pivot Grid.Row="1">
+                                <PivotItem Header="Color">
                                     <ScrollViewer>
                                         <StackPanel >
                                             <RadioButton x:Name="color_pen" Content="Pen Color" IsChecked="True"/>
@@ -145,35 +175,7 @@
                                         </StackPanel>
                                     </ScrollViewer>
                                 </PivotItem>
-                                <PivotItem Header="Pane">
-                                    <ListView ItemsSource="{Binding myColors}" IsItemClickEnabled="True" ItemClick="ColorList_ItemClick" SelectionMode="Single">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <Grid Height="48">
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="24"/>
-                                                        <ColumnDefinition />
-                                                    </Grid.ColumnDefinitions>
-                                                    <Rectangle Grid.Column="0" Fill="{Binding IndexColorBrush}" Height="20" Width="20"/>
-                                                    <TextBlock Grid.Column="1" Text="{Binding ColorName}" Margin="24,0,0,0" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
-                                                </Grid>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-                                </PivotItem>
                             </Pivot>
-                            <ScrollViewer x:Name="pens_list" Grid.Row="1" ScrollViewer.VerticalScrollBarVisibility="Hidden" ScrollViewer.HorizontalScrollBarVisibility="Auto" VerticalAlignment="Stretch" HorizontalAlignment="Stretch"
-                                  Visibility="Collapsed">
-                                <Grid >
-                                    <ListView ItemsSource="{Binding pensCollection}" IsItemClickEnabled="True" ItemClick="PenList_ItemClick"  SelectionMode="Single">
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock Text="{Binding PenName}" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-                                </Grid>
-                            </ScrollViewer>
 
                             <Grid>
                                 <Grid x:Name="Container" Opacity="0" />
