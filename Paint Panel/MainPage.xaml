@@ -11,7 +11,7 @@
     <Grid >
 
         <Grid x:Name="GlassHost"/>
-        <Grid x:Name="GlassColor" Background="Azure" Opacity="0.3"/>
+        <Grid x:Name="GlassColor" Background="Azure" Opacity="0.7"/>
 
         <Grid >
 
@@ -62,7 +62,10 @@
                                 <ListView ItemsSource="{Binding pensCollection}" IsItemClickEnabled="True" ItemClick="PenList_ItemClick"  SelectionMode="Single">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding PenName}" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center"/>
+                                            <StackPanel Orientation="Horizontal">
+                                                <Image Source="{Binding Image}" Width="200"/>
+                                                <TextBlock Text="{Binding PenName}" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center" Margin="10"/>
+                                            </StackPanel>
                                         </DataTemplate>
                                     </ListView.ItemTemplate>
                                 </ListView>

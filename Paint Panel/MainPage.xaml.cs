@@ -62,11 +62,11 @@ namespace Paint_Panel
             myColors = PanelColors.PaneColors;
             pensCollection = new ObservableCollection<PensCollection>()
             {
-                new PensCollection { Pen = new UsualPen(), PenName = "Usual Pen" },
-                new PensCollection { Pen = new MarkerPen(), PenName = "Marker Pen" },
-                new PensCollection { Pen = new CalligraphyPen(), PenName = "Calligraphy Pen" },
-                new PensCollection { Pen = new PencilBrush(), PenName = "Pencil Brush" },
-                new PensCollection { Pen = new InkBrush(), PenName = "Ink Brush" }
+                new PensCollection { Pen = new UsualPen(), PenName = "Usual Pen", Image = "ms-appx:///Image/UsualPen.jpg" },
+                new PensCollection { Pen = new MarkerPen(), PenName = "Marker Pen", Image = "ms-appx:///Image/MarkerPen.jpg" },
+                new PensCollection { Pen = new CalligraphyPen(), PenName = "Calligraphy Pen", Image = "ms-appx:///Image/CalligraphyPen.jpg" },
+                new PensCollection { Pen = new PencilBrush(), PenName = "Pencil Brush", Image = "ms-appx:///Image/PencilBrush.jpg" },
+                new PensCollection { Pen = new InkBrush(), PenName = "Ink Brush", Image = "ms-appx:///Image/InkBrush.jpg" }
             };
             this.DataContext = this;
             // 墨迹堆栈
@@ -358,7 +358,7 @@ namespace Paint_Panel
 
         private async void InitializePanel()
         {
-            StorageFile image_file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Background/PC_Background.png"));
+            StorageFile image_file = await StorageFile.GetFileFromApplicationUriAsync(new Uri("ms-appx:///Image/PC_Background.png"));
             BitmapImage image = new BitmapImage();
             x = await image_file.OpenAsync(FileAccessMode.Read);
             image.SetSource(x);
@@ -498,5 +498,7 @@ namespace Paint_Panel
         public InkToolbarCustomPen Pen { get; set; }
 
         public string PenName { get; set; }
+
+        public string Image { get; set; }
     }
 }
