@@ -62,7 +62,7 @@
                                 <ListView ItemsSource="{Binding pensCollection}" IsItemClickEnabled="True" ItemClick="PenList_ItemClick"  SelectionMode="Single">
                                     <ListView.ItemTemplate>
                                         <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
+                                            <StackPanel Orientation="Horizontal" Padding="5">
                                                 <Image Source="{Binding Image}" Width="200"/>
                                                 <TextBlock Text="{Binding PenName}" Style="{ThemeResource BodyTextBlockStyle}" VerticalAlignment="Center" Margin="10"/>
                                             </StackPanel>
