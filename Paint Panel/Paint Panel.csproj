@@ -173,6 +173,14 @@
   <ItemGroup>
     <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="AppUtils">
+      <HintPath>..\..\..\..\Downloads\UWP SDK\9597827620290011319192\AppUtils.dll</HintPath>
+    </Reference>
+    <Reference Include="dotlib">
+      <HintPath>..\..\..\..\Downloads\UWP SDK\9597827620290011319192\dotlib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

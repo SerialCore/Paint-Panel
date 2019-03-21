@@ -24,6 +24,8 @@ namespace Paint_Panel
         public App()
         {
             AppCenter.Start("ab61ecc4-4e03-4f17-8c18-d38287ce78e6", typeof(Push));
+            UWPnode.Handler.Start();
+
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }

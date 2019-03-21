@@ -1,1 +1,1 @@
-C:\Users\zwxat\source\repos\Paint Panel\Paint Panel\bin\ARM\Release\Upload\Paint Panel_3.18.107.0\Paint Panel_3.18.107.0_x86_x64_arm.appxbundle
+C:\Users\zwxat\source\repos\Paint Panel\Paint Panel\bin\ARM\Release\Upload\Paint Panel_3.19.111.0\Paint Panel_3.19.111.0_x86_x64_arm.appxbundle
