@@ -151,23 +151,20 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AppCenter">
-      <Version>1.10.0</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Push">
-      <Version>1.10.0</Version>
+      <Version>1.14.0</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.1.5</Version>
+      <Version>6.2.8</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp">
-      <Version>3.0.0</Version>
+      <Version>5.1.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.Notifications">
-      <Version>3.0.0</Version>
+      <Version>5.1.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp.UI.Controls">
-      <Version>3.0.0</Version>
+      <Version>5.1.1</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
