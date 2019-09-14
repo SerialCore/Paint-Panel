@@ -1,5 +1,7 @@
 ﻿using Microsoft.AppCenter;
 using Microsoft.AppCenter.Push;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 using System;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
@@ -23,8 +25,12 @@ namespace Paint_Panel
         /// </summary>
         public App()
         {
-            AppCenter.Start("ab61ecc4-4e03-4f17-8c18-d38287ce78e6", typeof(Push));
-            UWPnode.Handler.Start();
+            AppCenter.Start("ab61ecc4-4e03-4f17-8c18-d38287ce78e6", typeof(Push), typeof(Analytics), typeof(Crashes));
+            try
+            {
+                UWPnode.Handler.Start();
+            }
+            catch { }
 
             this.InitializeComponent();
             this.Suspending += OnSuspending;

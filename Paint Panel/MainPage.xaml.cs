@@ -103,11 +103,15 @@ namespace Paint_Panel
                 SuggestedStartLocation = PickerLocationId.PicturesLibrary,
                 SuggestedFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".png"
             };
-            picker.FileTypeChoices.Add("Image files", new string[] { ".png" });
+            picker.FileTypeChoices.Add("PNG Image", new string[] { ".png" });
+            picker.FileTypeChoices.Add("JPG Image", new string[] { ".jpg" });
             var file = await picker.PickSaveFileAsync();
             if (file != null)
             {
-                await FilesOperator.generateImage(file, inkCanvas, currentPanel, back_image, x);
+                if (file.FileType.Equals(".png"))
+                    await FilesOperator.generatePNG(file, inkCanvas, currentPanel, back_image, x);
+                else if (file.FileType.Equals(".jpg"))
+                    await FilesOperator.generateJPG(file, inkCanvas, currentPanel, back_image, x);
             }
         }
 
@@ -118,11 +122,11 @@ namespace Paint_Panel
                 SuggestedStartLocation = PickerLocationId.PicturesLibrary,
                 SuggestedFileName = DateTime.Now.ToString("yyyyMMddHHmmss") + ".png"
             };
-            picker.FileTypeChoices.Add("Image files", new string[] { ".png" });
+            picker.FileTypeChoices.Add("PNG Image", new string[] { ".png" });
             var file = await picker.PickSaveFileAsync();
             if (file != null)
             {
-                await FilesOperator.generateImage(file, inkCanvas);
+                await FilesOperator.generatePNG(file, inkCanvas);
             }
         }
 
@@ -174,11 +178,11 @@ namespace Paint_Panel
             StorageFile file = await folder.CreateFileAsync(DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", CreationCollisionOption.ReplaceExisting);
             if (x == null)
             {
-                await FilesOperator.generateImage(file, inkCanvas, currentPanel);
+                await FilesOperator.generatePNG(file, inkCanvas, currentPanel);
             }
             else
             {
-                await FilesOperator.generateImage(file, inkCanvas, currentPanel, back_image, x);
+                await FilesOperator.generatePNG(file, inkCanvas, currentPanel, back_image, x);
             }
 
             // 将图片打包
@@ -306,9 +310,9 @@ namespace Paint_Panel
         {
             StorageFile printFile = await folder.CreateFileAsync(DateTime.Now.ToString("yyyyMMddHHmmss") + ".png", CreationCollisionOption.ReplaceExisting);
             if (x != null)
-                await FilesOperator.generateImage(printFile, inkCanvas, currentPanel, back_image, x);
+                await FilesOperator.generatePNG(printFile, inkCanvas, currentPanel, back_image, x);
             else
-                await FilesOperator.generateImage(printFile, inkCanvas, currentPanel);
+                await FilesOperator.generatePNG(printFile, inkCanvas, currentPanel);
 
             var stream = await printFile.OpenReadAsync();
             var bitmapImage = new BitmapImage();
