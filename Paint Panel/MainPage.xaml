@@ -178,7 +178,8 @@
                             </Viewbox.RenderTransform>
                             <controls:DropShadowPanel BlurRadius="8" ShadowOpacity="0.5" Color="Black"
                                   OffsetX="2" OffsetY="2" VerticalAlignment="Center" HorizontalAlignment="Center">
-                                <Grid x:Name="panel_color">
+                                <Grid>
+                                    <Rectangle x:Name="panel_color"/>
                                     <Image x:Name="back_image" />
                                     <InkCanvas x:Name="inkCanvas" SizeChanged="InkCanvas_SizeChanged"/>
                                 </Grid>

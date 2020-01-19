@@ -173,10 +173,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AppUtils">
-      <HintPath>..\..\..\..\Desktop\UWP SDK\9597827620290011319192\AppUtils.dll</HintPath>
+      <HintPath>..\..\..\..\Downloads\UWP SDK\9597827620290011319192\AppUtils.dll</HintPath>
     </Reference>
     <Reference Include="dotlib">
-      <HintPath>..\..\..\..\Desktop\UWP SDK\9597827620290011319192\dotlib.dll</HintPath>
+      <HintPath>..\..\..\..\Downloads\UWP SDK\9597827620290011319192\dotlib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

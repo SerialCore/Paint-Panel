@@ -248,6 +248,8 @@ namespace Paint_Panel
                 x = await image_file.OpenAsync(FileAccessMode.Read);
                 bi3.SetSource(x);
                 back_image.Source = bi3;
+                color_panel.Height = 0;
+                color_panel.Width = 0;
             }
         }
 
@@ -377,13 +379,15 @@ namespace Paint_Panel
         {
             panel_color.Width = 1706;
             panel_color.Height = 1024;
-            panel_color.Background = new SolidColorBrush(Colors.White);
+            panel_color.Fill = new SolidColorBrush(Colors.White);
+            back_image.Source = null;
+            x = null;
         }
 
         private void ClearImage(object sender, RoutedEventArgs e)
         {
             InitializePanel();
-            panel_color.Background = new SolidColorBrush(Colors.White);
+            panel_color.Fill = new SolidColorBrush(Colors.White);
             if (x != null)
             {
                 x.Dispose();
@@ -410,7 +414,7 @@ namespace Paint_Panel
         private void ColorList_ItemClick(object sender, ItemClickEventArgs e)
         {
             var item = e.ClickedItem as MyColors;
-            panel_color.Background = item.IndexColorBrush;
+            panel_color.Fill = item.IndexColorBrush;
             currentPanel = item.IndexColor;
         }
 
@@ -433,7 +437,7 @@ namespace Paint_Panel
             }
             else if ((bool)color_panel.IsChecked)
             {
-                panel_color.Background = new SolidColorBrush(args.NewColor);
+                panel_color.Fill = new SolidColorBrush(args.NewColor);
                 currentPanel = args.NewColor;
             }
             else
