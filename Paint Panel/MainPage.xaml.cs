@@ -1,5 +1,4 @@
-﻿using Microsoft.Graphics.Canvas;
-using Microsoft.Toolkit.Uwp.Helpers;
+﻿using Microsoft.Toolkit.Uwp.Helpers;
 using Paint_Panel.Control;
 using Paint_Panel.Pens;
 using System;
@@ -10,6 +9,7 @@ using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
+using Windows.System;
 using Windows.UI;
 using Windows.UI.Composition;
 using Windows.UI.Input.Inking;
@@ -18,6 +18,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Hosting;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
@@ -114,7 +115,7 @@ namespace Paint_Panel
             customPen.Palette = PanelColors.ToolColors;
         }
 
-        private void FlyoutBase_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
+        private void FlyoutBase_Tapped(object sender, TappedRoutedEventArgs e)
             => FlyoutBase.ShowAttachedFlyout((FrameworkElement)sender);
 
         public ObservableCollection<MyColors> myColors { get; set; }
@@ -472,6 +473,11 @@ namespace Paint_Panel
             byte[] pixels = new byte[fileStream.Size];
             reader.ReadBytes(pixels);
             return pixels;
+        }
+
+        private async void Card_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            await Launcher.LaunchUriAsync(new Uri("ms-windows-store://pdp/?productid=9P8CHR55RS31"));
         }
 
     }

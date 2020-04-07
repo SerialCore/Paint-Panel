@@ -18,7 +18,7 @@
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>
     </PackageCertificateKeyFile>
-    <PackageCertificateThumbprint>24864192A1388D173B4A03E1850D0928CD4B52DE</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>386985D21D180AD9CC5D904554EF6F7C17DDCA2E</PackageCertificateThumbprint>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
     <AppxBundle>Always</AppxBundle>
@@ -132,6 +132,7 @@
     <Content Include="Assets\Square310x310Logo.scale-200.png" />
     <Content Include="Assets\Square71x71Logo.scale-200.png" />
     <Content Include="Assets\StoreLogo.scale-200.png" />
+    <Content Include="Image\Research Flow.jpg" />
     <Content Include="Image\CalligraphyPen.jpg" />
     <Content Include="Image\InkBrush.jpg" />
     <Content Include="Image\MarkerPen.jpg" />
@@ -156,7 +157,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NETCore.UniversalWindowsPlatform">
-      <Version>6.2.9</Version>
+      <Version>6.2.10</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Toolkit.Uwp">
       <Version>6.0.0</Version>
@@ -173,10 +174,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="AppUtils">
-      <HintPath>..\..\..\..\Desktop\UWP SDK\9597827620290011319192\AppUtils.dll</HintPath>
+      <HintPath>..\..\..\..\Downloads\UWP SDK\9597827620290011319192\AppUtils.dll</HintPath>
     </Reference>
     <Reference Include="dotlib">
-      <HintPath>..\..\..\..\Desktop\UWP SDK\9597827620290011319192\dotlib.dll</HintPath>
+      <HintPath>..\..\..\..\Downloads\UWP SDK\9597827620290011319192\dotlib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">

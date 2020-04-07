@@ -89,6 +89,18 @@
                         </Flyout>
                     </FlyoutBase.AttachedFlyout>
                 </AppBarButton>
+                <AppBarButton Icon="Shop" Tapped="FlyoutBase_Tapped" Height="38" Width="38">
+                    <FlyoutBase.AttachedFlyout>
+                        <Flyout>
+                            <GridViewItem Height="150" Width="100" Tapped="Card_Tapped" Background="Azure">
+                                <Grid>
+                                    <Image Source="Image/Research Flow.jpg" Margin="0,0,0,50"/>
+                                    <TextBlock Text="Research Flow has drawable note" TextWrapping="Wrap" VerticalAlignment="Bottom" Margin="5,0,5,0"/>
+                                </Grid>
+                            </GridViewItem>
+                        </Flyout>
+                    </FlyoutBase.AttachedFlyout>
+                </AppBarButton>
             </StackPanel>
 
             <StackPanel Grid.Row="1" Grid.Column="2" Orientation="Horizontal">
