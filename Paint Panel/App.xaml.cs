@@ -21,12 +21,6 @@ namespace Paint_Panel
         /// </summary>
         public App()
         {
-            try
-            {
-                UWPnode.Handler.Start();
-            }
-            catch { }
-
             this.InitializeComponent();
             this.Suspending += OnSuspending;
         }
